@@ -1,4 +1,7 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
+import daisyui from "daisyui"
+import typography from "@tailwindcss/typography"
+import { getIconCollections, iconsPlugin } from "@egoist/tailwindcss-icons"
 
 const config: Config = {
   content: [
@@ -14,6 +17,16 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
-};
-export default config;
+  plugins: [
+    typography,
+    daisyui,
+    iconsPlugin({
+      collections: getIconCollections(["ic", "lucide", "fa", "fa-solid"]),
+    }),
+  ],
+
+  daisyui: {
+    themes: ["bumblebee"],
+  },
+}
+export default config
