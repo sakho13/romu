@@ -1,7 +1,12 @@
 import { RomuApi } from "@/services/classes/RomuApi"
 import { RomuApiError } from "@/services/classes/RomuApiError"
+import * as admin from "firebase-admin"
 
 describe("services/classes/RomuApi", () => {
+  beforeAll(() => {
+    ;(admin.initializeApp as any) = jest.fn()
+  })
+
   test("executeが成功する", async () => {
     const mainLogic = jest.fn()
     mainLogic.mockResolvedValue("success")
