@@ -12,6 +12,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    environment:
+      name: romu-dev
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -20,8 +23,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: package.json
-          cache: 'npm'
-          cache-dependency-path: 'package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
 
       - name: Install dependencies
         run: npm ci
