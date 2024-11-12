@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String @default("empty")
+  email       String @unique
+  firebaseUid String @unique
+  // emailVerified DateTime?
+  // hashedPassword String?
+  // image         String?
+  // accounts      Account[]
+  // sessions      Session[]
+  // Optional for WebAuthn support
+  // Authenticator Authenticator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  Workout         Workout[]
+  TrainingUnit    TrainingHead[]
+  TrainingWorkout TrainingWorkout[]
+}
+
+model Workout {
+  id        String  @id @default(uuid())
+  type      Int // 1: バーベル、2: ダンベル、3: マシン、4: ケーブル、10: 自重、9: 有酸素
+  part      Int // 0: 指定なし、1: 胸、2: 背中、3: 肩、4: 腕、5: 脚、6: 腹
+  name      String
+  memo      String
+  createdBy String? @db.Uuid
+  isDefault Boolean @default(false)
+
+  user            User?             @relation(fields: [createdBy], references: [id])
+  TrainingWorkout TrainingWorkout[]
+}
+
+model TrainingHead {
+  userId    String   @db.Uuid
+  id        String   @default(uuid()) @db.Uuid
+  startedAt DateTime @default(now())
+
+  user            User              @relation(fields: [userId], references: [id])
+  TrainingWorkout TrainingWorkout[]
+
+  @@id([userId, id])
+}
+
+model TrainingWorkout {
+  userId         String @db.Uuid
+  trainingHeadId String @db.Uuid
+  trainingOrder  Int // トレーニング順番
+
+  workoutId String
+  memo      String
+
+  user         User          @relation(fields: [userId], references: [id])
+  trainingHead TrainingHead  @relation(fields: [userId, trainingHeadId], references: [userId, id])
+  workout      Workout       @relation(fields: [workoutId], references: [id])
+  TrainingSet  TrainingSet[]
+
+  @@id([userId, trainingHeadId, trainingOrder])
+}
+
+model TrainingSet {
+  userId         String @db.Uuid
+  trainingHeadId String @db.Uuid
+  trainingOrder  Int
+  setNo          Int    @default(autoincrement())
+
+  weight   Float? // kg
+  reps     Int? // 回
+  distance Float? // km
+  time     Int? // minites
+
+  trainingWorkout TrainingWorkout @relation(fields: [userId, trainingHeadId, trainingOrder], references: [userId, trainingHeadId, trainingOrder])
+
+  @@id([userId, trainingHeadId, trainingOrder, setNo])
+}
