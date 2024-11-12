@@ -6,7 +6,9 @@ if (!admin.apps.length) {
     credential: admin.credential.cert({
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "",
       clientEmail: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL ?? "",
-      privateKey: process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY ?? "",
+      privateKey:
+        process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY?.replaceAll("\\n", "\n") ??
+        "",
     }),
     databaseURL: process.env.DATABASE_URL,
   })
