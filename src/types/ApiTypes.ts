@@ -22,7 +22,7 @@ export type RomuApiErrorUnit = {
 }
 
 export type ErrorUnitGenerator<E extends ErrorCode> =
-  ErrorMessageParams<E> extends never
+  ErrorMessageParams<E> extends {}
     ? {
         errorCode: E
       }
