@@ -31,9 +31,9 @@ export type ErrorUnitGenerator<E extends ErrorCode> =
         param: ErrorMessageParams<E>
       }
 
-export type ErrorMessageParams<E extends ErrorCode> = StringToParam<
-  ErrorMessage<E>
->
+export type ErrorMessageParams<E extends ErrorCode> = {
+  [p in StringToParam<ErrorMessage<E>>]: string
+}
 
 export type ErrorCode = keyof typeof ErrorCodes
 type ErrorMessage<E extends ErrorCode> = (typeof ErrorCodes)[E]["message"]
