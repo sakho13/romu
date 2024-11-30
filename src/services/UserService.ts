@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import { RomuApiError } from "./classes/RomuApiError"
 
 export class UserService {
   /**
@@ -33,5 +34,21 @@ export class UserService {
       },
     })
     return created
+  }
+
+  public static async updateUserByFirebaseUid(
+    db: PrismaClient,
+    firebaseUid: string,
+    userData: Partial<{ name: string }>,
+  ) {
+    if (Object.keys(userData).length === 0)
+      throw new RomuApiError({
+        errorCode: "NoPermission",
+        param: { userId: firebaseUid },
+      })
+    return await db.user.update({
+      data: { name: userData.name },
+      where: { firebaseUid },
+    })
   }
 }
