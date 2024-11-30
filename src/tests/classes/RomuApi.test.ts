@@ -24,7 +24,7 @@ describe("services/classes/RomuApi", () => {
   test("executeが失敗する RomuApiError", async () => {
     const mainLogic = jest.fn()
     mainLogic.mockRejectedValueOnce(
-      new RomuApiError({ errorCode: "AuthFailed" }),
+      new RomuApiError({ errorCode: "AuthFailed", param: {} }),
     )
     const api = new RomuApi("User-GET", {} as any)
 
@@ -55,6 +55,31 @@ describe("services/classes/RomuApi", () => {
           {
             errorCode: "UnknownError",
             message: "不明なエラーが発生しました",
+          },
+        ],
+      },
+    })
+  })
+
+  test("executeが失敗する RomuApiError errorCode=InvalidInputTrimMinLength", async () => {
+    const mainLogic = jest.fn()
+    mainLogic.mockRejectedValueOnce(
+      new RomuApiError({
+        errorCode: "InvalidInputTrimMinLength",
+        param: { column: "ニックネーム", minLength: "1" },
+      }),
+    )
+    const api = new RomuApi("User-GET", {} as any)
+
+    await expect(api.execute(mainLogic)).resolves.toEqual({
+      status: 400,
+      data: {
+        success: false,
+        errors: [
+          {
+            errorCode: "InvalidInputTrimMinLength",
+            message:
+              "最小文字数を満たしていません ニックネームは1文字以上である必要があります",
           },
         ],
       },
