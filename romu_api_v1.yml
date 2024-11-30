@@ -1,0 +1,142 @@
+openapi: "3.0.3"
+info:
+  title: Romu API
+  version: "1.0"
+servers:
+  - url: https://localhost:3000/api
+    description: Local server
+paths:
+  /v1/user:
+    get:
+      summary: ユーザ情報の取得
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+                  email:
+                    type: string
+                    example: "romu-user123@romu.com"
+                  name:
+                    type: string
+                    example: "RoMu"
+    post:
+      summary: ユーザの新規作成
+      description: サインイン/アップ時に使用
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+                  email:
+                    type: string
+                    example: "romu-user123@romu.com"
+                  name:
+                    type: string
+                    example: "RoMu"
+    patch:
+      summary: ユーザ情報の部分更新
+      description: ユーザ情報の編集時に使用する
+      responses:
+        "200":
+          description: Success
+          headers:
+            Authorization:
+              description: Authorization token
+              schema:
+                type: string
+                description: Bearer token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "nickname"
+                    description: ユーザ名（全体に公開される）
+                    nullable: true
+                    minLength: 1
+
+  /v1/workouts:
+    get:
+      summary: ワークアウト一覧の取得
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                      description: ワークアウト名
+                      example:
+                        - ベンチプレス
+                        - スクワット
+                        - デッドリフト
+                    memo:
+                      type: string
+                      description: メモ
+                    type:
+                      type: integer
+                      description: 種目の種類
+                      example:
+                        - 1 バーベル
+                        - 2 ダンベル
+                        - 3 マシン
+                        - 4 ケーブル
+                        - 10 自重
+                        - 9 有酸素
+                    part:
+                      type: integer
+                      description: 筋肉の部位
+                      example:
+                        - 0 指定なし
+                        - 1 胸
+                        - 2 背中
+                        - 3 肩
+                        - 4 腕
+                        - 5 脚
+                        - 6 腹
+                    isDefault:
+                      type: boolean
+                      description: ユーザが編集可能かどうか
+
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
