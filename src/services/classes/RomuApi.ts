@@ -11,7 +11,7 @@ import { verifyIdToken } from "@/utils/firebaseAdmin"
 export class RomuApi<P extends ApiResponseSelector> {
   private apiSelector: P
 
-  constructor(apiSelector: P, req: NextApiRequest) {
+  constructor(apiSelector: P) {
     this.apiSelector = apiSelector
   }
 
