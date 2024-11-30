@@ -4,6 +4,7 @@ import {
   ApiResponseSelector,
   ApiResponse,
   RomuApiResponse,
+  ApiRequest,
 } from "@/types/ApiTypes"
 import { verifyIdToken } from "@/utils/firebaseAdmin"
 
@@ -39,6 +40,7 @@ export class RomuApi<P extends ApiResponseSelector> {
         const err = new RomuApiError(
           {
             errorCode: "UnknownError",
+            param: {},
           },
           error,
         )
@@ -57,14 +59,14 @@ export class RomuApi<P extends ApiResponseSelector> {
     authorization: string | null | undefined,
   ) {
     if (!authorization || !authorization.startsWith("Bearer "))
-      throw new RomuApiError({ errorCode: "AuthFailed" })
+      throw new RomuApiError({ errorCode: "AuthFailed", param: {} })
 
     const accessToken = authorization.split(" ")[1]
 
     try {
       return await verifyIdToken(accessToken)
     } catch (error) {
-      throw new RomuApiError({ errorCode: "AuthFailed" }, error)
+      throw new RomuApiError({ errorCode: "AuthFailed", param: {} }, error)
     }
   }
 }

@@ -21,15 +21,10 @@ export type RomuApiErrorUnit = {
   message: string
 }
 
-export type ErrorUnitGenerator<E extends ErrorCode> =
-  ErrorMessageParams<E> extends {}
-    ? {
-        errorCode: E
-      }
-    : {
-        errorCode: E
-        param: ErrorMessageParams<E>
-      }
+export type ErrorUnitGenerator<E extends ErrorCode> = {
+  errorCode: E
+  param: ErrorMessageParams<E>
+}
 
 export type ErrorMessageParams<E extends ErrorCode> = {
   [p in StringToParam<ErrorMessage<E>>]: string
@@ -54,6 +49,11 @@ export const ErrorCodes = {
   NoPermission: {
     status: 400,
     message: "権限がありません ユーザID:[userId]",
+  },
+  InvalidInputTrimMinLength: {
+    status: 400,
+    message:
+      "最小文字数を満たしていません [column]は[minLength]文字以上である必要があります",
   },
 } as const
 

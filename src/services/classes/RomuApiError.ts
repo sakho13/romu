@@ -14,11 +14,12 @@ export class RomuApiError<E extends ErrorCode> extends Error {
   private err: Error | null = null
 
   constructor(err: ErrorUnitGenerator<E>, catchError?: any) {
-    const msg = ErrorCodes[err.errorCode].message
-    if ("param" in err)
-      Object.entries(err.param).forEach(([param, value]) => {
-        msg.replaceAll(`[${param}]`, value)
-      })
+    const msg = Object.keys(err.param).reduce((p, paramKey) => {
+      return p.replaceAll(
+        `[${paramKey}]`,
+        err.param[paramKey as keyof ErrorMessageParams<E>] as string,
+      )
+    }, ErrorCodes[err.errorCode].message)
 
     super(msg)
     this.errorCode = err.errorCode
