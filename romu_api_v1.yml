@@ -5,10 +5,19 @@ info:
 servers:
   - url: https://localhost:3000/api
     description: Local server
+
+tags:
+  - name: common
+    description: 共通
+  - name: workout
+    description: ワークアウト
+
 paths:
   /v1/user:
     get:
       summary: ユーザ情報の取得
+      tags:
+        - common
       responses:
         "200":
           description: Success
@@ -26,8 +35,16 @@ paths:
                   name:
                     type: string
                     example: "RoMu"
+              examples:
+                Success:
+                  value:
+                    id: "OC4gK6P11123NasALqSshfkiopoPz3"
+                    email: "romu-user123@romu.com"
+                    name: "RoMu"
     post:
       summary: ユーザの新規作成
+      tags:
+        - common
       description: サインイン/アップ時に使用
       requestBody:
         required: false
@@ -54,6 +71,8 @@ paths:
                     example: "RoMu"
     patch:
       summary: ユーザ情報の部分更新
+      tags:
+        - common
       description: ユーザ情報の編集時に使用する
       responses:
         "200":
@@ -79,6 +98,8 @@ paths:
   /v1/workouts:
     get:
       summary: ワークアウト一覧の取得
+      tags:
+        - workout
       responses:
         "200":
           description: Success
@@ -129,6 +150,8 @@ paths:
   /health:
     get:
       summary: Health check
+      tags:
+        - common
       responses:
         "200":
           description: OK
