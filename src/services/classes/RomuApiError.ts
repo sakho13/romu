@@ -1,6 +1,6 @@
+import { ErrorCodes } from "@/statics/ErrorCodes"
 import {
   ErrorCode,
-  ErrorCodes,
   ErrorMessageParams,
   ErrorUnitGenerator,
   RomuApiErrorUnit,

@@ -1,3 +1,4 @@
+import { ErrorCodes } from "@/statics/ErrorCodes"
 import { StringToParam } from "./CommonTypes"
 
 export type RomuApiResponse<S extends ApiResponseSelector> =
@@ -33,30 +34,6 @@ export type ErrorMessageParams<E extends ErrorCode> = {
 export type ErrorCode = keyof typeof ErrorCodes
 type ErrorMessage<E extends ErrorCode> = (typeof ErrorCodes)[E]["message"]
 
-export const ErrorCodes = {
-  UnknownError: {
-    status: 400,
-    message: "不明なエラーが発生しました",
-  },
-  AuthFailed: {
-    status: 401,
-    message: "認証に失敗しました",
-  },
-  DbConnectionFailed: {
-    status: 400,
-    message: "データベースに接続できませんでした",
-  },
-  NoPermission: {
-    status: 400,
-    message: "権限がありません ユーザID:[userId]",
-  },
-  InvalidInputTrimMinLength: {
-    status: 400,
-    message:
-      "最小文字数を満たしていません [column]は[minLength]文字以上である必要があります",
-  },
-} as const
-
 // ****************************************************
 
 export const ApiPath: {
@@ -64,7 +41,7 @@ export const ApiPath: {
 } = {
   "User-GET": "/api/v1/user",
   "User-POST": "/api/v1/user",
-  "User-PUT": "/api/v1/user",
+  "User-PATCH": "/api/v1/user",
 
   "Users-GET": "/api/v1/users",
 
@@ -126,13 +103,12 @@ type RomuApiIO = {
       }
     }
 
-    PUT: {
+    PATCH: {
       input: {
         name: string | null | undefined
       }
 
       out: {
-        id: string
         name: string
       }
     }
