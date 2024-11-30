@@ -8,14 +8,23 @@ import {
 import { exponentialBackoff } from "./functions/exponentialBackoff"
 
 export class ApiV1Service {
+  public static async getUser(accessToken: string) {
+    return await requestApiV1("User-GET", {}, accessToken)
+  }
+
   public static async postUser(accessToken: string) {
     return await exponentialBackoff(
       async () => await requestApiV1("User-POST", {}, accessToken),
     )
   }
 
-  public static async getUser(accessToken: string) {
-    return await requestApiV1("User-GET", {}, accessToken)
+  public static async patchUser(
+    accessToken: string,
+    editData: ApiRequest<"User-PATCH">,
+  ) {
+    return await exponentialBackoff(
+      async () => await requestApiV1("User-PATCH", editData, accessToken),
+    )
   }
 }
 

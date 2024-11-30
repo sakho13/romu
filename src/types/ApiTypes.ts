@@ -104,9 +104,9 @@ type RomuApiIO = {
     }
 
     PATCH: {
-      input: {
-        name: string | null | undefined
-      }
+      input: Partial<{
+        name: string | null
+      }>
 
       out: {
         name: string
