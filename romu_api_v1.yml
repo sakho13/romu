@@ -214,12 +214,22 @@ paths:
                     editable: true
                     workout:
                       id: "OC4gK6P11123NasALqSshfkiopoPz3"
-                      name: "ベンチプレス"
+                      name: "ベンチプレス（バーベル）"
                       memo: "90kg達成"
                       type: 1
                       part: 1
                       isDefault: false
-                SuccessNotEditable:
+                SuccessNotEditableAndDefault:
+                  value:
+                    editable: false
+                    workout:
+                      id: "benchPress"
+                      name: "ベンチプレス"
+                      memo: "90kg達成"
+                      type: 1
+                      part: 1
+                      isDefault: true
+                SuccessNotEditableAndNotDefault:
                   value:
                     editable: false
                     workout: null
