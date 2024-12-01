@@ -1,7 +1,6 @@
 import {
   ApiPath,
   ApiRequest,
-  ApiResponse,
   ApiResponseSelector,
   RomuApiResponse,
 } from "@/types/ApiTypes"
@@ -30,6 +29,10 @@ export class ApiV1Service {
 
   public static async getWorkouts(accessToken: string) {
     return await requestApiV1("Workouts-GET", {}, accessToken)
+  }
+
+  public static async getWorkout(accessToken: string, workoutId: string) {
+    return await requestApiV1("Workout-GET", { workoutId }, accessToken)
   }
 }
 
