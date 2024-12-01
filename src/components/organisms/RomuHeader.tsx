@@ -95,13 +95,23 @@ export function RomuHeader({ type }: Props) {
             <ul
               tabIndex={0}
               className={joinClassName(
-                "menu menu-sm dropdown-content",
+                "menu menu-md dropdown-content",
                 "shadow-sm",
                 "bg-base-100 rounded-box z-[1] mt-3 w-52 p-2",
               )}
             >
               <li>
                 <Link href={"/romu/profile"}>プロフィール</Link>
+              </li>
+              <li>
+                <Link
+                  href={
+                    "https://docs.google.com/forms/d/e/1FAIpQLScFK8I_yVuDWXYhwuixi_jRDY7tAKdECqdiPs8KS1XB_Fgzdg/viewform?usp=sf_link"
+                  }
+                  target='_blank'
+                >
+                  問い合わせ
+                </Link>
               </li>
               <li>
                 <a onClick={logout}>ログアウト</a>
