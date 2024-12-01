@@ -65,16 +65,20 @@ export async function PATCH(req: NextRequest) {
     }> = {}
     const body = await req.json()
 
-    if ("name" in body) {
-      const name = body.name
-      if (!(String(name).trim().length >= 1))
-        throw new RomuApiError({
-          errorCode: "InvalidInputTrimMinLength",
-          param: { column: "name", minLength: "1" },
-        })
+    api.checkMultipleErrors([
+      () => {
+        if ("name" in body) {
+          const name = body.name
+          if (!(String(name).trim().length >= 1))
+            throw new RomuApiError({
+              errorCode: "InvalidInputTrimMinLength",
+              param: { column: "name", minLength: "1" },
+            })
 
-      editUserData.name = name
-    }
+          editUserData.name = name
+        }
+      },
+    ])
 
     const user = await UserService.updateUserByFirebaseUid(
       prisma,
