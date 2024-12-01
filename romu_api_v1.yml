@@ -206,6 +206,113 @@ paths:
                     nullable: true
                     example: 1
 
+  /v1/training?day={day}:
+    get:
+      summary: トレーニング記録の取得
+      tags:
+        - workout
+      parameters:
+        - name: day
+          in: path
+          required: true
+          description: トレーニング日
+          schema:
+            type: string
+            example: "20241101"
+      responses:
+        "200":
+          description: Success
+          headers:
+            Authorization:
+              description: Authorization token
+              schema:
+                type: string
+                description: Bearer token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trainingId:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+                  trainedAt:
+                    type: string
+                    example: "20241101"
+                  menu:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        workoutId:
+                          type: string
+                          example: "benchPress"
+                        workoutName:
+                          type: string
+                          example: "ベンチプレス"
+                        type:
+                          type: integer
+                          description: 種目の種類
+                          example: 1
+                        part:
+                          type: integer
+                          description: 筋肉の部位
+                          example: 1
+                        trainingMemo:
+                          type: string
+                          description: メモ
+                        set:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              weight:
+                                type: number
+                                description: 重量
+                                example: 90
+                              rep:
+                                type: integer
+                                description: 回数
+                                example: 10
+                              time:
+                                type: string
+                                nullable: true
+                                description: 時間 hhmmss
+                                example: "003000"
+                              distance:
+                                type: number
+                                nullable: true
+                                description: 距離 / km
+                                example: 1000
+              examples:
+                Success:
+                  value:
+                    trainingId: "OC4gK6P11123NasALqSshfkiopoPz3"
+                    trainedAt: "20241101"
+                    menu:
+                      - workoutId: "benchPress"
+                        workoutName: "ベンチプレス"
+                        type: 1
+                        part: 1
+                        trainingMemo: "90kg達成"
+                        set:
+                          - weight: 90
+                            rep: 1
+                          - weight: 70
+                            rep: 9
+                          - weight: 70
+                            rep: 8
+                      - workoutId: "wfnauihAsdj"
+                        workoutName: "トレッドミル"
+                        type: 9
+                        part: 0
+                        trainingMemo: ""
+                        set:
+                          - time: null
+                            distance: 1.5
+                          - time: "001500"
+                            distance: null
+
   /health:
     get:
       summary: Health check
@@ -222,3 +329,7 @@ paths:
                   status:
                     type: string
                     example: "OK"
+              examples:
+                Success:
+                  value:
+                    status: "OK"
