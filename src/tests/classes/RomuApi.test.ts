@@ -1,5 +1,6 @@
 import { RomuApi } from "@/services/classes/RomuApi"
 import { RomuApiError } from "@/services/classes/RomuApiError"
+import { RomuApiErrors } from "@/services/classes/RomuApiErrors"
 import * as admin from "firebase-admin"
 
 describe("services/classes/RomuApi", () => {
@@ -67,6 +68,7 @@ describe("services/classes/RomuApi", () => {
       mainLogic.mockRejectedValueOnce(
         new RomuApiError({
           errorCode: "InvalidInputTrimMinLength",
+          column: "ニックネーム",
           param: { column: "ニックネーム", minLength: "1" },
         }),
       )
@@ -81,6 +83,50 @@ describe("services/classes/RomuApi", () => {
               errorCode: "InvalidInputTrimMinLength",
               message:
                 "最小文字数を満たしていません ニックネームは1文字以上である必要があります",
+            },
+          ],
+        },
+      })
+    })
+
+    test("失敗する RomuApiErrors", async () => {
+      const mainLogic = jest.fn()
+      mainLogic.mockRejectedValueOnce(
+        new RomuApiErrors(
+          new RomuApiError({
+            errorCode: "InvalidInputTrimMinLength",
+            column: "name",
+            param: {
+              column: "ニックネーム",
+              minLength: "1",
+            },
+          }).forRomuApiErrorsProp,
+          new RomuApiError({
+            errorCode: "InvalidInputEnum",
+            column: "part",
+            param: {
+              column: "部位",
+            },
+          }).forRomuApiErrorsProp,
+        ),
+      )
+      const api = new RomuApi("Workout-POST")
+
+      await expect(api.execute(mainLogic)).resolves.toStrictEqual({
+        status: 400,
+        data: {
+          success: false,
+          errors: [
+            {
+              errorCode: "InvalidInputTrimMinLength",
+              column: "name",
+              message:
+                "最小文字数を満たしていません ニックネームは1文字以上である必要があります",
+            },
+            {
+              errorCode: "InvalidInputEnum",
+              column: "part",
+              message: "値が不正です 部位の選択値に誤りがあります",
             },
           ],
         },
