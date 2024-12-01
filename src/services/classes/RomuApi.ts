@@ -1,10 +1,8 @@
 import { RomuApiError } from "./RomuApiError"
-import { NextApiRequest } from "next"
 import {
   ApiResponseSelector,
   ApiResponse,
   RomuApiResponse,
-  ApiRequest,
 } from "@/types/ApiTypes"
 import { verifyIdToken } from "@/utils/firebaseAdmin"
 
@@ -58,15 +56,23 @@ export class RomuApi<P extends ApiResponseSelector> {
   public async verifyAuthorizationHeader(
     authorization: string | null | undefined,
   ) {
-    if (!authorization || !authorization.startsWith("Bearer "))
+    if (
+      !authorization ||
+      typeof authorization !== "string" ||
+      !authorization.startsWith("Bearer ")
+    )
       throw new RomuApiError({ errorCode: "AuthFailed", param: {} })
 
     const accessToken = authorization.split(" ")[1]
 
     try {
-      return await verifyIdToken(accessToken)
+      return await this.verifyFirebaseIdToken(accessToken)
     } catch (error) {
       throw new RomuApiError({ errorCode: "AuthFailed", param: {} }, error)
     }
+  }
+
+  private async verifyFirebaseIdToken(token: string) {
+    return await verifyIdToken(token)
   }
 }
