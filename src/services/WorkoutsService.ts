@@ -31,4 +31,33 @@ export class WorkoutsService {
       },
     })
   }
+
+  /**
+   * ワークアウトを取得する
+   * @param db
+   * @param firebaseUid
+   * @param workoutId
+   * @returns
+   */
+  public static async getWorkout(
+    db: PrismaClient,
+    firebaseUid: string,
+    workoutId: string,
+  ) {
+    return await db.workout.findUnique({
+      where: {
+        id: workoutId,
+        OR: [
+          {
+            isDefault: true,
+          },
+          {
+            user: {
+              firebaseUid,
+            },
+          },
+        ],
+      },
+    })
+  }
 }
