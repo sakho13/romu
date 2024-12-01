@@ -45,6 +45,7 @@ export const ApiPath: {
   "User-PATCH": "/api/v1/user",
 
   "Workouts-GET": "/api/v1/workouts",
+  "Workout-GET": "/api/v1/workout",
 
   "Trainings-GET": "/api/v1/trainings",
   "Trainings-POST": "/api/v1/trainings",
@@ -117,6 +118,18 @@ type RomuApiIO = {
     GET: {
       out: {
         workouts: RomuWorkout[]
+      }
+    }
+  }
+
+  Workout: {
+    GET: {
+      in: {
+        workoutId: string
+      }
+      out: {
+        editable: boolean
+        workout: RomuWorkout | null
       }
     }
   }
