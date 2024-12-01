@@ -5,10 +5,15 @@ import {
   ErrorUnitGenerator,
   RomuApiErrorUnit,
 } from "@/types/ApiTypes"
+import { RomuApiErrorInterface } from "@/types/RomuInterfaces"
 
-export class RomuApiError<E extends ErrorCode> extends Error {
+export class RomuApiError<E extends ErrorCode>
+  extends Error
+  implements RomuApiErrorInterface
+{
+  httpStatus: number
   private errorCode: E
-  private httpStatus: number
+  private column: string | undefined
   private errorParam: ErrorMessageParams<E>
 
   private err: Error | null = null
@@ -25,6 +30,7 @@ export class RomuApiError<E extends ErrorCode> extends Error {
     this.errorCode = err.errorCode
     this.httpStatus = ErrorCodes[err.errorCode].status
     this.errorParam = "param" in err ? err.param : ({} as ErrorMessageParams<E>)
+    if (err.column) this.column = err.column
 
     if (catchError) this.err = catchError
 
@@ -32,14 +38,20 @@ export class RomuApiError<E extends ErrorCode> extends Error {
       console.log("!!UnknownError >", this.err)
   }
 
-  public toErrorUnit() {
-    return {
-      errorCode: this.errorCode,
-      message: this.message,
-    } satisfies RomuApiErrorUnit
+  public toErrorUnits() {
+    return [
+      {
+        errorCode: this.errorCode,
+        message: this.message,
+      },
+    ] satisfies RomuApiErrorUnit[]
   }
 
-  public get HttpStatus() {
-    return this.httpStatus
+  public get forRomuApiErrorsProp() {
+    return {
+      errorCode: this.errorCode,
+      column: this.column,
+      message: this.message,
+    } satisfies RomuApiErrorUnit
   }
 }

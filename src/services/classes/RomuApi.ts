@@ -5,6 +5,7 @@ import {
   RomuApiResponse,
 } from "@/types/ApiTypes"
 import { verifyIdToken } from "@/utils/firebaseAdmin"
+import { RomuApiErrors } from "./RomuApiErrors"
 
 export class RomuApi<P extends ApiResponseSelector> {
   private apiSelector: P
@@ -28,10 +29,19 @@ export class RomuApi<P extends ApiResponseSelector> {
     } catch (error) {
       if (error instanceof RomuApiError) {
         return {
-          status: error.HttpStatus,
+          status: error.httpStatus,
           data: {
             success: false,
-            errors: [error.toErrorUnit()],
+            errors: error.toErrorUnits(),
+          },
+        }
+      }
+      if (error instanceof RomuApiErrors && !error.isEmpty) {
+        return {
+          status: error.httpStatus,
+          data: {
+            success: false,
+            errors: error.toErrorUnits(),
           },
         }
       } else {
@@ -46,7 +56,7 @@ export class RomuApi<P extends ApiResponseSelector> {
           status: 400,
           data: {
             success: false,
-            errors: [err.toErrorUnit()],
+            errors: err.toErrorUnits(),
           },
         }
       }
