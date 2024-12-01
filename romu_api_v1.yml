@@ -47,6 +47,10 @@ paths:
                     id: "OC4gK6P11123NasALqSshfkiopoPz3"
                     email: "romu-user123@romu.com"
                     name: "RoMu"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
 
     post:
       summary: ユーザの新規作成
@@ -82,6 +86,10 @@ paths:
                   name:
                     type: string
                     example: "RoMu"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
 
     patch:
       summary: ユーザ情報の部分更新
@@ -108,6 +116,10 @@ paths:
                     description: ユーザ名（全体に公開される）
                     nullable: true
                     minLength: 1
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
 
   /v1/workouts:
     get:
@@ -132,26 +144,11 @@ paths:
                     type: array
                     items:
                       type: object
-                      properties:
-                        id:
-                          type: string
-                        name:
-                          type: string
-                          description: ワークアウト名
-                          example:
-                            - ベンチプレス
-                            - スクワット
-                            - デッドリフト
-                        memo:
-                          type: string
-                          description: メモ
-                        type:
-                          $ref: "#/components/schemas/RomuWorkoutTypeEnum"
-                        part:
-                          $ref: "#/components/schemas/RomuWorkoutPartEnum"
-                        isDefault:
-                          type: boolean
-                          description: ユーザが編集可能かどうか
+                      $ref: "#/components/schemas/RomuWorkout"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
 
     patch:
       summary: ワークアウトの部分更新
@@ -170,23 +167,11 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  id:
-                    type: string
-                    nullable: false
-                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
-                  name:
-                    type: string
-                    nullable: true
-                    example: "ベンチプレス（バーベル）"
-                  memo:
-                    type: string
-                    nullable: true
-                    example: "2024/11/01 90kg達成\n2024/12/01 100kg達成"
-                  type:
-                    $ref: "#/components/schemas/RomuWorkoutTypeEnum"
-                  part:
-                    $ref: "#/components/schemas/RomuWorkoutPartEnum"
+                $ref: "#/components/schemas/RomuWorkout"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
 
   /v1/workout?workoutId={workoutId}:
     get:
@@ -222,23 +207,7 @@ paths:
                   workout:
                     type: object
                     nullable: true
-                    properties:
-                      id:
-                        type: string
-                        example: "OC4gK6P11123NasALqSshfkiopoPz3"
-                      name:
-                        type: string
-                        example: "ベンチプレス"
-                      memo:
-                        type: string
-                        example: "90kg達成"
-                      type:
-                        $ref: "#/components/schemas/RomuWorkoutTypeEnum"
-                      part:
-                        $ref: "#/components/schemas/RomuWorkoutPartEnum"
-                      isDefault:
-                        type: boolean
-                        example: false
+                    $ref: "#/components/schemas/RomuWorkout"
               examples:
                 SuccessEditable:
                   value:
@@ -254,6 +223,10 @@ paths:
                   value:
                     editable: false
                     workout: null
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
 
   /v1/training?day={day}:
     get:
@@ -357,6 +330,10 @@ paths:
                             distance: 1.5
                           - time: "001500"
                             distance: null
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
 
   /health:
     get:
@@ -402,3 +379,81 @@ components:
         - 4
         - 5
         - 6
+    RomuApiV1ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              errorCode:
+                type: string
+              message:
+                type: string
+    RomuWorkout:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: ワークアウト名
+        memo:
+          type: string
+        type:
+          $ref: "#/components/schemas/RomuWorkoutTypeEnum"
+        part:
+          $ref: "#/components/schemas/RomuWorkoutPartEnum"
+        isDefault:
+          type: boolean
+          description: ユーザが編集可能かどうか
+
+  responses:
+    RomuApiV1Error400Response:
+      description: ロジックエラー
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RomuApiV1ErrorResponse"
+          examples:
+            UnknownError:
+              value:
+                success: false
+                errors:
+                  - errorCode: "UnknownError"
+                    message: "不明なエラーが発生しました"
+            DbConnectionFailed:
+              value:
+                success: false
+                errors:
+                  - errorCode: "DbConnectionFailed"
+                    message: "データベースに接続できませんでした"
+            NoPermission:
+              value:
+                success: false
+                errors:
+                  - errorCode: "NoPermission"
+                    message: "権限がありません ユーザID:OC4gK6P11123NasALqSshfkiopoPz3"
+            InvalidInputTrimMinLength:
+              value:
+                success: false
+                errors:
+                  - errorCode: "InvalidInputTrimMinLength"
+                    message: "最小文字数を満たしていません ニックネームは1文字以上である必要があります"
+    RomuApiV1Error401Response:
+      description: 認証エラー
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RomuApiV1ErrorResponse"
+          examples:
+            AuthFailed:
+              value:
+                success: false
+                errors:
+                  - errorCode: "AuthFailed"
+                    message: "認証に失敗しました"
