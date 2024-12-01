@@ -15,6 +15,10 @@ export const ErrorCodes = {
     status: 400,
     message: "権限がありません ユーザID:[userId]",
   },
+  RequiredParameter: {
+    status: 400,
+    message: "[column]は必須項目です",
+  },
   InvalidInputTrimMinLength: {
     status: 400,
     message:
