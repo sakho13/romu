@@ -146,26 +146,9 @@ paths:
                           type: string
                           description: メモ
                         type:
-                          type: integer
-                          description: 種目の種類
-                          example:
-                            - 1 バーベル
-                            - 2 ダンベル
-                            - 3 マシン
-                            - 4 ケーブル
-                            - 10 自重
-                            - 9 有酸素
+                          $ref: "#/components/schemas/RomuWorkoutTypeEnum"
                         part:
-                          type: integer
-                          description: 筋肉の部位
-                          example:
-                            - 0 指定なし
-                            - 1 胸
-                            - 2 背中
-                            - 3 肩
-                            - 4 腕
-                            - 5 脚
-                            - 6 腹
+                          $ref: "#/components/schemas/RomuWorkoutPartEnum"
                         isDefault:
                           type: boolean
                           description: ユーザが編集可能かどうか
@@ -201,13 +184,76 @@ paths:
                     nullable: true
                     example: "2024/11/01 90kg達成\n2024/12/01 100kg達成"
                   type:
-                    type: integer
-                    nullable: true
-                    example: 1
+                    $ref: "#/components/schemas/RomuWorkoutTypeEnum"
                   part:
-                    type: integer
+                    $ref: "#/components/schemas/RomuWorkoutPartEnum"
+
+  /v1/workout?workoutId={workoutId}:
+    get:
+      summary: ワークアウトを個別で取得
+      tags:
+        - workout
+      parameters:
+        - name: workoutId
+          in: path
+          required: true
+          description: ワークアウトID
+          schema:
+            type: string
+            example: "OC4gK6P11123NasALqSshfkiopoPz3"
+      responses:
+        "200":
+          description: Success
+          headers:
+            Authorization:
+              description: Authorization token
+              schema:
+                type: string
+                description: Bearer token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  editable:
+                    type: boolean
+                    description: 編集が可能かどうか
+                    example: true
+                  workout:
+                    type: object
                     nullable: true
-                    example: 1
+                    properties:
+                      id:
+                        type: string
+                        example: "OC4gK6P11123NasALqSshfkiopoPz3"
+                      name:
+                        type: string
+                        example: "ベンチプレス"
+                      memo:
+                        type: string
+                        example: "90kg達成"
+                      type:
+                        $ref: "#/components/schemas/RomuWorkoutTypeEnum"
+                      part:
+                        $ref: "#/components/schemas/RomuWorkoutPartEnum"
+                      isDefault:
+                        type: boolean
+                        example: false
+              examples:
+                SuccessEditable:
+                  value:
+                    editable: true
+                    workout:
+                      id: "OC4gK6P11123NasALqSshfkiopoPz3"
+                      name: "ベンチプレス"
+                      memo: "90kg達成"
+                      type: 1
+                      part: 1
+                      isDefault: false
+                SuccessNotEditable:
+                  value:
+                    editable: false
+                    workout: null
 
   /v1/training?day={day}:
     get:
@@ -254,13 +300,9 @@ paths:
                           type: string
                           example: "ベンチプレス"
                         type:
-                          type: integer
-                          description: 種目の種類
-                          example: 1
+                          $ref: "#/components/schemas/RomuWorkoutTypeEnum"
                         part:
-                          type: integer
-                          description: 筋肉の部位
-                          example: 1
+                          $ref: "#/components/schemas/RomuWorkoutPartEnum"
                         trainingMemo:
                           type: string
                           description: メモ
@@ -336,3 +378,27 @@ paths:
                 Success:
                   value:
                     status: "OK"
+
+components:
+  schemas:
+    RomuWorkoutTypeEnum:
+      type: integer
+      description: "種目の種類\n1: バーベル、2: ダンベル、3: マシン、4: ケーブル、10: 自重、9: 有酸素"
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 10
+        - 9
+    RomuWorkoutPartEnum:
+      type: integer
+      description: "筋肉の部位\n0: 指定なし、1: 胸、2: 背中、3: 肩、4: 腕、5: 脚、6: 腹"
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
