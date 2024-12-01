@@ -126,46 +126,49 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    name:
-                      type: string
-                      description: ワークアウト名
-                      example:
-                        - ベンチプレス
-                        - スクワット
-                        - デッドリフト
-                    memo:
-                      type: string
-                      description: メモ
-                    type:
-                      type: integer
-                      description: 種目の種類
-                      example:
-                        - 1 バーベル
-                        - 2 ダンベル
-                        - 3 マシン
-                        - 4 ケーブル
-                        - 10 自重
-                        - 9 有酸素
-                    part:
-                      type: integer
-                      description: 筋肉の部位
-                      example:
-                        - 0 指定なし
-                        - 1 胸
-                        - 2 背中
-                        - 3 肩
-                        - 4 腕
-                        - 5 脚
-                        - 6 腹
-                    isDefault:
-                      type: boolean
-                      description: ユーザが編集可能かどうか
+                type: object
+                properties:
+                  workouts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                          description: ワークアウト名
+                          example:
+                            - ベンチプレス
+                            - スクワット
+                            - デッドリフト
+                        memo:
+                          type: string
+                          description: メモ
+                        type:
+                          type: integer
+                          description: 種目の種類
+                          example:
+                            - 1 バーベル
+                            - 2 ダンベル
+                            - 3 マシン
+                            - 4 ケーブル
+                            - 10 自重
+                            - 9 有酸素
+                        part:
+                          type: integer
+                          description: 筋肉の部位
+                          example:
+                            - 0 指定なし
+                            - 1 胸
+                            - 2 背中
+                            - 3 肩
+                            - 4 腕
+                            - 5 脚
+                            - 6 腹
+                        isDefault:
+                          type: boolean
+                          description: ユーザが編集可能かどうか
 
     patch:
       summary: ワークアウトの部分更新
