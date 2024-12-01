@@ -1,5 +1,10 @@
 import { ErrorCodes } from "@/statics/ErrorCodes"
 import { StringToParam } from "./CommonTypes"
+import {
+  RomuWorkout,
+  RomuWorkoutPartEnum,
+  RomuWorkoutTypeEnum,
+} from "./WorkoutType"
 
 export type RomuApiResponse<S extends ApiResponseSelector> =
   | {
@@ -42,8 +47,6 @@ export const ApiPath: {
   "User-GET": "/api/v1/user",
   "User-POST": "/api/v1/user",
   "User-PATCH": "/api/v1/user",
-
-  "Users-GET": "/api/v1/users",
 
   "Workouts-GET": "/api/v1/workouts",
 
@@ -114,24 +117,10 @@ type RomuApiIO = {
     }
   }
 
-  Users: {
-    GET: {
-      out: {
-        users: {
-          id: string
-          name: string
-        }[]
-      }
-    }
-  }
-
   Workouts: {
     GET: {
       out: {
-        workouts: {
-          id: string
-          name: string
-        }[]
+        workouts: RomuWorkout[]
       }
     }
   }
