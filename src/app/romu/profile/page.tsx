@@ -1,6 +1,7 @@
 "use client"
 
 import { CenteringLayout } from "@/components/atoms/CenteringLayout"
+import { RomuPageTitle } from "@/components/atoms/RomuPageTitle"
 import { ApiV1Service } from "@/services/ApiService"
 import { joinClassName } from "@/services/functions/joinClassName"
 import { useLoading } from "@/services/hooks/useLoading"
@@ -71,7 +72,7 @@ export default function Page() {
   return (
     <CenteringLayout>
       <div className='flex flex-col items-center justify-center h-full mt-8'>
-        <h1 className='text-4xl font-bold my-2'>Profile</h1>
+        <RomuPageTitle title='プロフィール' />
 
         <label className='input input-bordered flex items-center gap-2 my-2'>
           <svg
