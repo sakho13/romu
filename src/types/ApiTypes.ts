@@ -1,6 +1,10 @@
 import { ErrorCodes } from "@/statics/ErrorCodes"
 import { StringToParam } from "./CommonTypes"
-import { RomuWorkout } from "./WorkoutType"
+import {
+  RomuWorkout,
+  RomuWorkoutPartEnum,
+  RomuWorkoutTypeEnum,
+} from "./WorkoutType"
 
 export type RomuApiResponse<S extends ApiResponseSelector> =
   | {
@@ -21,11 +25,13 @@ export type RomuApiResponse<S extends ApiResponseSelector> =
 export type RomuApiErrorUnit = {
   errorCode: ErrorCode
   message: string
+  column?: string
 }
 
 export type ErrorUnitGenerator<E extends ErrorCode> = {
   errorCode: E
   param: ErrorMessageParams<E>
+  column?: E extends `InvalidInput${infer _}` ? string : undefined
 }
 
 export type ErrorMessageParams<E extends ErrorCode> = {
@@ -46,6 +52,7 @@ export const ApiPath: {
 
   "Workouts-GET": "/api/v1/workouts",
   "Workout-GET": "/api/v1/workout",
+  "Workout-POST": "/api/v1/workout",
 
   "Trainings-GET": "/api/v1/trainings",
   "Trainings-POST": "/api/v1/trainings",
@@ -130,6 +137,18 @@ type RomuApiIO = {
       out: {
         editable: boolean
         workout: RomuWorkout | null
+      }
+    }
+
+    POST: {
+      in: {
+        name: string
+        memo: string
+        type: RomuWorkoutTypeEnum
+        part: RomuWorkoutPartEnum
+      }
+      out: {
+        workoutId: string
       }
     }
   }
