@@ -21,6 +21,12 @@ paths:
       responses:
         "200":
           description: Success
+          headers:
+            Authorization:
+              description: Authorization token
+              schema:
+                type: string
+                description: Bearer token
           content:
             application/json:
               schema:
@@ -41,6 +47,7 @@ paths:
                     id: "OC4gK6P11123NasALqSshfkiopoPz3"
                     email: "romu-user123@romu.com"
                     name: "RoMu"
+
     post:
       summary: ユーザの新規作成
       tags:
@@ -55,6 +62,12 @@ paths:
       responses:
         "200":
           description: Success
+          headers:
+            Authorization:
+              description: Authorization token
+              schema:
+                type: string
+                description: Bearer token
           content:
             application/json:
               schema:
@@ -69,6 +82,7 @@ paths:
                   name:
                     type: string
                     example: "RoMu"
+
     patch:
       summary: ユーザ情報の部分更新
       tags:
@@ -103,6 +117,12 @@ paths:
       responses:
         "200":
           description: Success
+          headers:
+            Authorization:
+              description: Authorization token
+              schema:
+                type: string
+                description: Bearer token
           content:
             application/json:
               schema:
@@ -146,6 +166,45 @@ paths:
                     isDefault:
                       type: boolean
                       description: ユーザが編集可能かどうか
+
+    patch:
+      summary: ワークアウトの部分更新
+      tags:
+        - workout
+      responses:
+        "200":
+          description: Success
+          headers:
+            Authorization:
+              description: Authorization token
+              schema:
+                type: string
+                description: Bearer token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    nullable: false
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+                  name:
+                    type: string
+                    nullable: true
+                    example: "ベンチプレス（バーベル）"
+                  memo:
+                    type: string
+                    nullable: true
+                    example: "2024/11/01 90kg達成\n2024/12/01 100kg達成"
+                  type:
+                    type: integer
+                    nullable: true
+                    example: 1
+                  part:
+                    type: integer
+                    nullable: true
+                    example: 1
 
   /health:
     get:
