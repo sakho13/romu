@@ -44,7 +44,7 @@ export function RomuHeader({ type }: Props) {
               <Link href={"/romu"}>Home</Link>
             </li>
             <li>
-              <Link href={"/romu/workout"}>Workout</Link>
+              <Link href={"/romu/workouts"}>Workout</Link>
             </li>
             <li>
               <Link href={"/romu/analyze"}>Analyze</Link>
@@ -67,7 +67,7 @@ export function RomuHeader({ type }: Props) {
               <Link href={"/romu"}>Home</Link>
             </li>
             <li>
-              <Link href={"/romu/workout"}>Workout</Link>
+              <Link href={"/romu/workouts"}>Workout</Link>
             </li>
             <li>
               <Link href={"/romu/analyze"}>Analyze</Link>
