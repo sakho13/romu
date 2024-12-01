@@ -3,5 +3,5 @@ type Props = {
 }
 
 export function RomuPageTitle({ title }: Props) {
-  return <h1 className='text-4xl font-bold my-2'>{title}</h1>
+  return <h1 className='text-4xl font-bold my-2 select-none'>{title}</h1>
 }
