@@ -15,7 +15,7 @@ export const ErrorCodes = {
     status: 400,
     message: "権限がありません ユーザID:[userId]",
   },
-  RequiredParameter: {
+  InvalidInputRequiredParameter: {
     status: 400,
     message: "[column]は必須項目です",
   },

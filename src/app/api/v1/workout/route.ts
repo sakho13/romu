@@ -4,6 +4,7 @@ import {
   cvRomuWorkoutPartByInt,
   cvRomuWorkoutTypeByInt,
 } from "@/services/functions/convertValue"
+import { RomuApiValidateService } from "@/services/RomuApiValidateService"
 import { WorkoutsService } from "@/services/WorkoutsService"
 import { prisma } from "@/utils/prisma"
 import { headers } from "next/headers"
@@ -20,7 +21,8 @@ export async function GET(req: NextRequest) {
     const workoutId = api.getQueryParameter(req.url, "workoutId")
     if (workoutId === null || workoutId === "")
       throw new RomuApiError({
-        errorCode: "RequiredParameter",
+        errorCode: "InvalidInputRequiredParameter",
+        column: "ワークアウトID",
         param: { column: "workoutId" },
       })
 
@@ -45,6 +47,32 @@ export async function GET(req: NextRequest) {
         memo: workout.memo,
         isDefault: workout.isDefault,
       },
+    }
+  })
+
+  return NextResponse.json(result.data, { status: result.status })
+}
+
+export async function POST(req: NextRequest) {
+  const api = new RomuApi("Workout-POST")
+
+  const result = await api.execute(async () => {
+    const decoded = await api.verifyAuthorizationHeader(
+      headers().get("authorization"),
+    )
+
+    const body = await req.json()
+
+    api.checkMultipleErrors([
+      () => {
+        if (RomuApiValidateService.requiredParameter(body, "name")) {
+          body.name
+        }
+      },
+    ])
+
+    return {
+      workoutId: "",
     }
   })
 
