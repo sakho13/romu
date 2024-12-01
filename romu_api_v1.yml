@@ -18,15 +18,11 @@ paths:
       summary: ユーザ情報の取得
       tags:
         - common
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
           description: Success
-          headers:
-            Authorization:
-              description: Authorization token
-              schema:
-                type: string
-                description: Bearer token
           content:
             application/json:
               schema:
@@ -57,6 +53,8 @@ paths:
       tags:
         - common
       description: サインイン/アップ時に使用
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
       requestBody:
         required: false
         content:
@@ -66,12 +64,6 @@ paths:
       responses:
         "200":
           description: Success
-          headers:
-            Authorization:
-              description: Authorization token
-              schema:
-                type: string
-                description: Bearer token
           content:
             application/json:
               schema:
@@ -96,15 +88,11 @@ paths:
       tags:
         - common
       description: ユーザ情報の編集時に使用する
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
           description: Success
-          headers:
-            Authorization:
-              description: Authorization token
-              schema:
-                type: string
-                description: Bearer token
           content:
             application/json:
               schema:
@@ -126,15 +114,11 @@ paths:
       summary: ワークアウト一覧の取得
       tags:
         - workout
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
           description: Success
-          headers:
-            Authorization:
-              description: Authorization token
-              schema:
-                type: string
-                description: Bearer token
           content:
             application/json:
               schema:
@@ -154,15 +138,11 @@ paths:
       summary: ワークアウトの部分更新
       tags:
         - workout
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
           description: Success
-          headers:
-            Authorization:
-              description: Authorization token
-              schema:
-                type: string
-                description: Bearer token
           content:
             application/json:
               schema:
@@ -186,15 +166,10 @@ paths:
           schema:
             type: string
             example: "OC4gK6P11123NasALqSshfkiopoPz3"
+        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
           description: Success
-          headers:
-            Authorization:
-              description: Authorization token
-              schema:
-                type: string
-                description: Bearer token
           content:
             application/json:
               schema:
@@ -238,6 +213,50 @@ paths:
         "401":
           $ref: "#/components/responses/RomuApiV1Error401Response"
 
+  /v1/workout:
+    post:
+      summary: ワークアウトの新規作成
+      tags:
+        - workout
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  nullable: false
+                  example: "ベンチプレス（バーベル）"
+                memo:
+                  type: string
+                  nullable: false
+                  example: ""
+                type:
+                  nullable: false
+                  $ref: "#/components/schemas/RomuWorkoutTypeEnum"
+                part:
+                  nullable: false
+                  $ref: "#/components/schemas/RomuWorkoutPartEnum"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  workoutId:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
   /v1/training?day={day}:
     get:
       summary: トレーニング記録の取得
@@ -251,15 +270,10 @@ paths:
           schema:
             type: string
             example: "20241101"
+        - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
           description: Success
-          headers:
-            Authorization:
-              description: Authorization token
-              schema:
-                type: string
-                description: Bearer token
           content:
             application/json:
               schema:
@@ -467,3 +481,13 @@ components:
                 errors:
                   - errorCode: "AuthFailed"
                     message: "認証に失敗しました"
+
+  parameters:
+    AuthorizationHeader:
+      name: Authorization
+      in: header
+      required: true
+      description: Authorization token
+      schema:
+        type: string
+        description: Bearer token
