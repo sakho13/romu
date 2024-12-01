@@ -65,6 +65,9 @@ export class RomuApi<P extends ApiResponseSelector> {
 
     const accessToken = authorization.split(" ")[1]
 
+    if (accessToken === undefined || accessToken === "")
+      throw new RomuApiError({ errorCode: "AuthFailed", param: {} })
+
     try {
       return await this.verifyFirebaseIdToken(accessToken)
     } catch (error) {
@@ -72,6 +75,23 @@ export class RomuApi<P extends ApiResponseSelector> {
     }
   }
 
+  /**
+   * リクエストURLからクエリパラメータを取得する
+   * @param reqUrl リクエストURL
+   * @param key 取得対象のキー
+   * @returns 空文字列・パラメータが存在しないの場合はnullを返す
+   */
+  public getQueryParameter(reqUrl: string, key: string) {
+    const { searchParams } = new URL(reqUrl)
+    const param = searchParams.get(key)
+    return param && param !== "" ? param : null
+  }
+
+  /**
+   * FirebaseのIDトークンを検証する
+   * @param token FirebaseのIDトークン
+   * @returns
+   */
   private async verifyFirebaseIdToken(token: string) {
     return await verifyIdToken(token)
   }
