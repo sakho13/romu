@@ -5,6 +5,20 @@ import {
   RomuWorkoutTypeEnum,
 } from "@/types/WorkoutType"
 
+export function cvObjectToQueryParamString(obj: Record<string, any>): string {
+  return Object.keys(obj)
+    .map((key) => {
+      if (typeof obj[key] === "string") return `${key}=${obj[key]}`
+      if (typeof obj[key] === "number") return `${key}=${obj[key]}`
+      if (typeof obj[key] === "boolean")
+        return `${key}=${obj[key] === true ? "1" : "0"}`
+      return undefined
+    })
+    .filter((v) => v !== undefined)
+    .flat()
+    .join("&")
+}
+
 export function cvRomuWorkoutPartByInt(part: number): RomuWorkoutPartEnum {
   if (part in RomuWorkoutPart) return part as RomuWorkoutPartEnum
   return 0

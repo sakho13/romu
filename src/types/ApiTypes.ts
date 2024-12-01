@@ -1,10 +1,6 @@
 import { ErrorCodes } from "@/statics/ErrorCodes"
 import { StringToParam } from "./CommonTypes"
-import {
-  RomuWorkout,
-  RomuWorkoutPartEnum,
-  RomuWorkoutTypeEnum,
-} from "./WorkoutType"
+import { RomuWorkout } from "./WorkoutType"
 
 export type RomuApiResponse<S extends ApiResponseSelector> =
   | {
