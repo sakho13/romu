@@ -53,6 +53,34 @@ describe("services/DateService", () => {
         year: 2021,
         month: 11,
       })
+      expect(
+        DateService.shiftMonth({ year: 2022, month: 12, day: 20 }, 1),
+      ).toEqual({
+        year: 2023,
+        month: 1,
+        day: 20,
+      })
+      expect(
+        DateService.shiftMonth({ year: 2022, month: 12, day: 20 }, 2),
+      ).toEqual({
+        year: 2023,
+        month: 2,
+        day: 20,
+      })
+      expect(
+        DateService.shiftMonth({ year: 2022, month: 12, day: 20 }, -1),
+      ).toEqual({
+        year: 2022,
+        month: 11,
+        day: 20,
+      })
+      expect(
+        DateService.shiftMonth({ year: 2022, month: 12, day: 20 }, -2),
+      ).toEqual({
+        year: 2022,
+        month: 10,
+        day: 20,
+      })
     })
   })
 
