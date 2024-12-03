@@ -1,28 +1,11 @@
 import { PrismaClient } from "@prisma/client"
+import { initDataWorkouts } from "./initDatas/initDataWorkouts"
 const prisma = new PrismaClient()
 
-const defaultWorkouts = {
-  "bench-press": {
-    name: "ベンチプレス",
-    type: 1,
-    part: 1,
-  },
-  squat: {
-    name: "スクワット",
-    type: 1,
-    part: 5,
-  },
-  "dead-lift": {
-    name: "デッドリフト",
-    type: 1,
-    part: 2,
-  },
-}
-
-const transfer = async () => {
+const transferWorkouts = async () => {
   return await prisma.$transaction(async (t) => {
     await t.workout.createMany({
-      data: Object.entries(defaultWorkouts).map(([id, data]) => ({
+      data: Object.entries(initDataWorkouts).map(([id, data]) => ({
         id,
         name: data.name,
         type: data.type,
@@ -39,7 +22,7 @@ const transfer = async () => {
 const main = async () => {
   console.log(`Start seeding ...`)
 
-  await transfer()
+  await transferWorkouts()
 
   console.log(`Seeding finished.`)
 }
