@@ -4,6 +4,9 @@ import { joinClassName } from "@/services/functions/joinClassName"
 import { firebaseClient } from "@/utils/firebaseClient"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { RomuHomeIcon } from "../atoms/icons/RomuHomeIcon"
+import { RomuAnalyzeIcon } from "../atoms/icons/RomuAnalyzeIcon"
+import { RomuTrendUpIcon } from "../atoms/icons/RomuTrendUpIcon"
 
 type Props = {
   type: "before-signed-in" | "signed-in"
@@ -17,7 +20,7 @@ export function RomuHeader({ type }: Props) {
   }
 
   return (
-    <div id='header' className='navbar border-b lg:px-16'>
+    <div id='header' className='navbar border-b lg:px-16 bg-red-50'>
       <div className='navbar-start'>
         <div className='dropdown'>
           <div tabIndex={0} role='button' className='btn btn-ghost lg:hidden'>
@@ -64,13 +67,22 @@ export function RomuHeader({ type }: Props) {
         <div className='navbar-center hidden lg:flex'>
           <ul className='menu menu-horizontal'>
             <li>
-              <Link href={"/romu"}>Home</Link>
+              <Link href={"/romu"}>
+                <RomuHomeIcon className='w-[24px] h-[24px]' />
+                Home
+              </Link>
             </li>
             <li>
-              <Link href={"/romu/workouts"}>Workout</Link>
+              <Link href={"/romu/workouts"}>
+                <RomuTrendUpIcon className='w-[24px] h-[24px]' />
+                Workout
+              </Link>
             </li>
             <li>
-              <Link href={"/romu/analyze"}>Analyze</Link>
+              <Link href={"/romu/analyze"}>
+                <RomuAnalyzeIcon className='w-[24px] h-[24px]' />
+                Analyze
+              </Link>
             </li>
           </ul>
         </div>
