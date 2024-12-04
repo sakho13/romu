@@ -11,6 +11,8 @@ tags:
     description: 共通
   - name: workout
     description: ワークアウト
+  - name: development
+    description: 開発中
 
 paths:
   /v1/user:
@@ -266,6 +268,7 @@ paths:
       summary: トレーニング記録の取得
       tags:
         - workout
+        - development
       parameters:
         - name: day
           in: path
@@ -358,6 +361,132 @@ paths:
                             distance: 1.5
                           - time: "001500"
                             distance: null
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
+  /v1/training-menus:
+    get:
+      summary: トレーニングメニュー一覧の取得
+      tags:
+        - workout
+        - development
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trainingMenus:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        trainingMenuId:
+                          type: string
+                          nullable: false
+                        name:
+                          type: string
+                          nullable: false
+                        memo:
+                          type: string
+                          nullable: false
+                          minLength: 0
+                          maxLength: 1000
+                        parts:
+                          type: array
+                          description: 筋肉の部位
+                          items:
+                            $ref: "#/components/schemas/RomuWorkoutPartEnum"
+                        types:
+                          type: array
+                          description: 種目の種類
+                          items:
+                            $ref: "#/components/schemas/RomuWorkoutTypeEnum"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
+  /v1/training-menu:
+    post:
+      summary: トレーニングメニューの新規作成
+      description: 通常ユーザの作成上限は4個
+      tags:
+        - workout
+        - development
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trainingMenu:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      workoutId:
+                        type: string
+                        nullable: false
+                memo:
+                  type: string
+                  nullable: false
+                  example: ""
+                  minLength: 0
+                  maxLength: 1000
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trainingMenuId:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
+    delete:
+      summary: トレーニングメニューの削除
+      tags:
+        - workout
+        - development
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trainingMenuId:
+                  type: string
+                  nullable: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trainingMenuId:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
         "400":
           $ref: "#/components/responses/RomuApiV1Error400Response"
         "401":
