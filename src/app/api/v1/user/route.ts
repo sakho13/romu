@@ -1,5 +1,6 @@
 import { RomuApi } from "@/services/classes/RomuApi"
 import { RomuApiError } from "@/services/classes/RomuApiError"
+import { RomuApiValidateService } from "@/services/RomuApiValidateService"
 import { UserService } from "@/services/UserService"
 import { prisma } from "@/utils/prisma"
 import { NextApiRequest } from "next"
@@ -65,7 +66,7 @@ export async function PATCH(req: NextRequest) {
     }> = {}
     const body = await req.json()
 
-    api.checkMultipleErrors([
+    RomuApiValidateService.checkMultipleErrors([
       () => {
         if ("name" in body) {
           const name = body.name
