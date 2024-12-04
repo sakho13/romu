@@ -35,7 +35,7 @@ export class WorkoutsService {
   /**
    * ワークアウトを取得する
    * @param db
-   * @param firebaseUid
+   * @param firebaseUid FirebaseのUID
    * @param workoutId
    * @returns
    */
@@ -58,6 +58,40 @@ export class WorkoutsService {
           },
         ],
       },
+    })
+  }
+
+  /**
+   * カスタムワークアウトを作成する
+   * @param db
+   * @param firebaseUid FirebaseのUID
+   * @param workout ワークアウト情報
+   * @returns
+   */
+  public static async createCustomWorkout(
+    db: PrismaClient,
+    firebaseUid: string,
+    workout: {
+      name: string
+      memo: string
+      type: number
+      part: number
+    },
+  ) {
+    return await db.workout.create({
+      data: {
+        name: workout.name,
+        memo: workout.memo,
+        type: workout.type,
+        part: workout.part,
+        isDefault: false,
+        user: {
+          connect: {
+            firebaseUid,
+          },
+        },
+      },
+      select: { id: true },
     })
   }
 }
