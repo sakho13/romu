@@ -83,7 +83,7 @@ model TrainingSet {
   weight   Float? // kg
   reps     Int? // 回
   distance Float? // km
-  time     Int? // minites
+  time     Int? // minutes
 
   trainingWorkout TrainingWorkout @relation(fields: [userId, trainingHeadId, trainingOrder], references: [userId, trainingHeadId, trainingOrder])
 
