@@ -15,6 +15,10 @@ export const ErrorCodes = {
     status: 400,
     message: "権限がありません ユーザID:[userId]",
   },
+  InvalidInputType: {
+    status: 400,
+    message: "入力値が不正です [column]の形式が不正です([type])",
+  },
   InvalidInputRequiredParameter: {
     status: 400,
     message: "[column]は必須項目です",

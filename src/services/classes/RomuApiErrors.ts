@@ -1,5 +1,6 @@
-import { RomuApiErrorUnit } from "@/types/ApiTypes"
+import { ErrorCode, RomuApiErrorUnit } from "@/types/ApiTypes"
 import { RomuApiErrorInterface } from "@/types/RomuInterfaces"
+import { RomuApiError } from "./RomuApiError"
 
 /**
  * 複数のエラーをまとめて扱うクラス
@@ -16,14 +17,20 @@ export class RomuApiErrors extends Error implements RomuApiErrorInterface {
   private romuApiErrorUnits: RomuApiErrorUnit[]
 
   constructor(...errors: RomuApiErrorUnit[]) {
-    super(`RomuApiErrors: ${errors.map((e) => e.message).join(", ")}`)
+    super(`RomuApiErrors`)
 
     this.romuApiErrorUnits = errors
     this.httpStatus = 400
   }
 
-  public pushError(error: RomuApiErrorUnit) {
-    this.romuApiErrorUnits.push(error)
+  public pushError<E extends ErrorCode>(
+    error: RomuApiErrorUnit | RomuApiError<E>,
+  ) {
+    if (error instanceof RomuApiError) {
+      this.romuApiErrorUnits.push(error.forRomuApiErrorsProp)
+    } else {
+      this.romuApiErrorUnits.push(error)
+    }
   }
 
   public toErrorUnits() {

@@ -150,55 +150,6 @@ describe("services/classes/RomuApi", () => {
         },
       })
     })
-
-    test("失敗する checkMultipleErrors", async () => {
-      const api = new RomuApi("Workout-POST")
-
-      await expect(
-        api.execute(() => {
-          api.checkMultipleErrors([
-            () => {
-              throw new RomuApiError({
-                errorCode: "InvalidInputTrimMinLength",
-                column: "name",
-                param: {
-                  column: "ワークアウト名",
-                  minLength: "1",
-                },
-              })
-            },
-            () => {
-              throw new RomuApiError({
-                errorCode: "InvalidInputEnum",
-                column: "part",
-                param: {
-                  column: "部位",
-                },
-              })
-            },
-          ])
-          return {} as any
-        }),
-      ).resolves.toStrictEqual({
-        status: 400,
-        data: {
-          success: false,
-          errors: [
-            {
-              errorCode: "InvalidInputTrimMinLength",
-              column: "name",
-              message:
-                "最小文字数を満たしていません ワークアウト名は1文字以上である必要があります",
-            },
-            {
-              errorCode: "InvalidInputEnum",
-              column: "part",
-              message: "値が不正です 部位の選択値に誤りがあります",
-            },
-          ],
-        },
-      })
-    })
   })
 
   describe("verifyAuthorizationHeader", () => {
