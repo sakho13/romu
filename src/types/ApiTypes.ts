@@ -131,7 +131,7 @@ type RomuApiIO = {
 
   Workout: {
     GET: {
-      in: {
+      input: {
         workoutId: string
       }
       out: {
@@ -141,7 +141,7 @@ type RomuApiIO = {
     }
 
     POST: {
-      in: {
+      input: {
         name: string
         memo: string
         type: RomuWorkoutTypeEnum
