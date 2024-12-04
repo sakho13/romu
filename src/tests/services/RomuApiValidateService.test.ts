@@ -1,7 +1,52 @@
 import { RomuApiError } from "@/services/classes/RomuApiError"
+import { RomuApiErrors } from "@/services/classes/RomuApiErrors"
 import { RomuApiValidateService } from "@/services/RomuApiValidateService"
 
 describe("services/RomuApiValidateService", () => {
+  describe("checkMultipleErrors", () => {
+    test("エラーチェック関数がエラーをスローしない場合、nullを返す", () => {
+      const checkFns = [() => {}]
+      expect(RomuApiValidateService.checkMultipleErrors(checkFns)).toBe(null)
+    })
+
+    test("エラーチェック関数がエラーをスローする場合、エラーを返す", () => {
+      const checkFns = [
+        () => {
+          throw new RomuApiError({
+            errorCode: "InvalidInputEnum",
+            column: "type",
+            param: { column: "種目" },
+          })
+        },
+      ]
+      expect(RomuApiValidateService.checkMultipleErrors(checkFns)).toEqual(
+        new RomuApiErrors(
+          new RomuApiError({
+            errorCode: "InvalidInputEnum",
+            column: "type",
+            param: { column: "種目" },
+          }).forRomuApiErrorsProp,
+        ),
+      )
+    })
+
+    test("エラーチェック関数がエラーをスローする場合、エラーを返す", () => {
+      const checkFns = [
+        () => {
+          throw new Error()
+        },
+      ]
+      expect(RomuApiValidateService.checkMultipleErrors(checkFns)).toEqual(
+        new RomuApiErrors(
+          new RomuApiError({
+            errorCode: "UnknownError",
+            param: {},
+          }).forRomuApiErrorsProp,
+        ),
+      )
+    })
+  })
+
   describe("requiredParameter", () => {
     test("指定したキーがオブジェクトに存在する場合、trueを返す", () => {
       const obj = { key: "value" }
