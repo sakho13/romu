@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/stores/useAuthStore"
 import { RomuHeader } from "@/components/organisms/RomuHeader"
-import { CenteringLayout } from "@/components/atoms/CenteringLayout"
+import { joinClassName } from "@/services/functions/joinClassName"
 
 export default function Home() {
   const { accessToken } = useAuthStore()
@@ -11,55 +11,57 @@ export default function Home() {
     <div className=''>
       <RomuHeader type={accessToken ? "signed-in" : "before-signed-in"} />
 
-      <main className='px-16 py-8'>
-        <CenteringLayout>
-          <section>
-            <h1>RoMu - トレーニング記録アプリ</h1>
-          </section>
+      <main>
+        <div
+          className={joinClassName(
+            "h-[300px] flex justify-center items-center",
+            "bg-base-100",
+            "border-b",
+          )}
+        >
+          <h1 className={joinClassName("select-none", "text-3xl font-bold")}>
+            RoMu - <span className='text-lg'>Training Management System</span>
+          </h1>
+        </div>
 
-          <section>
-            <h2></h2>
+        <section className='flex justify-center pt-4'>
+          <div>
+            <h2>主な機能</h2>
 
-            <table>
-              <thead>
-                <tr>
-                  <th>日付</th>
-                  <th>ワークアウト</th>
-                  <th>セット</th>
-                  <th>記憶率</th>
-                  <th>記憶速度</th>
-                  <th>記憶力</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>2021-10-01</td>
-                  <td>ベンチプレス</td>
-                  <td>10</td>
-                  <td>100%</td>
-                  <td>1.0</td>
-                  <td>100%</td>
-                </tr>
-                <tr>
-                  <td>2021-10-02</td>
-                  <td>00:20:00</td>
-                  <td>20</td>
-                  <td>100%</td>
-                  <td>1.0</td>
-                  <td>100%</td>
-                </tr>
-                <tr>
-                  <td>2021-10-03</td>
-                  <td>00:30:00</td>
-                  <td>30</td>
-                  <td>100%</td>
-                  <td>1.0</td>
-                  <td>100%</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-        </CenteringLayout>
+            <div>
+              <div
+                tabIndex={0}
+                className='collapse collapse-arrow border-base-300 bg-base-200 border'
+              >
+                <div className='collapse-title text-xl font-medium'>
+                  トレーニング記録
+                </div>
+                <div className='collapse-content'>
+                  <p>
+                    tabindex="0" attribute is necessary to make the div
+                    focusable
+                  </p>
+                </div>
+              </div>
+
+              <div
+                tabIndex={0}
+                className='collapse collapse-arrow border-base-300 bg-base-200 border'
+              >
+                <div className='collapse-title text-xl font-medium'>
+                  トレーニングメニュー
+                </div>
+                <div className='collapse-content'>
+                  <p>
+                    tabindex="0" attribute is necessary to make the div
+                    focusable
+                  </p>
+                </div>
+              </div>
+            </div>
+            {/*  */}
+          </div>
+        </section>
       </main>
 
       <footer className=''></footer>
