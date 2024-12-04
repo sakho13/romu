@@ -1,6 +1,7 @@
 import { RomuApiError } from "@/services/classes/RomuApiError"
 import { RomuApiErrors } from "@/services/classes/RomuApiErrors"
 import { RomuApiValidateService } from "@/services/RomuApiValidateService"
+import { te } from "date-fns/locale"
 
 describe("services/RomuApiValidateService", () => {
   describe("checkMultipleErrors", () => {
@@ -41,6 +42,32 @@ describe("services/RomuApiValidateService", () => {
           new RomuApiError({
             errorCode: "UnknownError",
             param: {},
+          }).forRomuApiErrorsProp,
+        ),
+      )
+    })
+  })
+
+  describe("checkRequiredParameterInObject", () => {
+    test("指定したキーがオブジェクトに存在する場合、エラーを返さない", () => {
+      const obj = { key: "value" }
+      const keys = [{ column: "key" }]
+      expect(
+        RomuApiValidateService.checkRequiredParameterInObject(obj, keys).error,
+      ).toBeNull()
+    })
+
+    test("指定したキーがオブジェクトに存在しない場合、エラーを返す", () => {
+      const obj = { key: "value" }
+      const keys = [{ column: "notKey", name: "name" }]
+      expect(
+        RomuApiValidateService.checkRequiredParameterInObject(obj, keys).error,
+      ).toEqual(
+        new RomuApiErrors(
+          new RomuApiError({
+            errorCode: "InvalidInputRequiredParameter",
+            column: "notKey",
+            param: { column: "name" },
           }).forRomuApiErrorsProp,
         ),
       )
