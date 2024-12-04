@@ -1,22 +1,10 @@
 "use client"
 
 import { ApiV1Service } from "@/services/ApiService"
-import { joinClassName } from "@/services/functions/joinClassName"
 import { useLoading } from "@/services/hooks/useLoading"
 import { firebaseClient } from "@/utils/firebaseClient"
-import {
-  getRedirectResult,
-  signInWithPopup,
-  GithubAuthProvider,
-  getAuth,
-} from "firebase/auth"
-import Link from "next/link"
-import {
-  redirect,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation"
+import { signInWithPopup, GithubAuthProvider } from "firebase/auth"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 type Provider = "github" | "google" | "spotify"
 
@@ -61,20 +49,37 @@ export function SignInForm() {
   }
 
   return (
-    <div id='sign-in-form' className='border m-16 p-8'>
+    <div
+      id='sign-in-form'
+      className='border rounded-2xl p-8 lg:w-[400px] w-full'
+    >
+      <div className='w-full'>
+        <p className='w-fit mx-auto my-4 font-bold text-2xl'>RoMu ログイン</p>
+      </div>
+
       <button
         id='github-sign-in-btn'
-        className='btn btn-primary'
+        className='btn btn-primary w-full'
         onClick={async () => await signInWithOAuth("github")}
       >
+        <svg
+          className='h-8 w-8'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+        >
+          {" "}
+          <path d='M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22' />
+        </svg>
         GitHub
       </button>
 
-      <dialog className={joinClassName("modal")}>
-        <div></div>
-      </dialog>
-
-      <p className={joinClassName("")}>{message ?? ""}</p>
+      <div className='w-full'>
+        <p className='w-fit mx-auto my-4'>{message ?? ""}</p>
+      </div>
     </div>
   )
 }
