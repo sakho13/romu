@@ -63,39 +63,6 @@ export class RomuApi<P extends ApiResponseSelector> {
     }
   }
 
-  /**
-   * 複数のエラーチェックを全て実行する
-   * @description エラーチェックで発生した全てのエラーをまとめて返す
-   * @param checkFns エラーチェック関数の配列 (エラーが発生した場合はRomuApiErrorをthrowする)
-   * @returns エラーチェックが全て成功した場合はtrueを返す
-   * @throws RomuApiErrors
-   */
-  public checkMultipleErrors(checkFns: (() => void)[]) {
-    const errors = new RomuApiErrors()
-
-    checkFns.forEach((fn) => {
-      try {
-        fn()
-      } catch (error) {
-        if (error instanceof RomuApiError) {
-          errors.pushError(error.forRomuApiErrorsProp)
-        } else {
-          const err = new RomuApiError(
-            {
-              errorCode: "UnknownError",
-              param: {},
-            },
-            error,
-          )
-          errors.pushError(err.forRomuApiErrorsProp)
-        }
-      }
-    })
-
-    if (!errors.isEmpty) throw errors
-    return true
-  }
-
   public async verifyAuthorizationHeader(
     authorization: string | null | undefined,
   ) {
