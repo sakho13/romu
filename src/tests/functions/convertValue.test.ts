@@ -1,4 +1,5 @@
 import {
+  cvObjectToQueryParamString,
   cvRomuWorkoutPartByInt,
   cvRomuWorkoutPartNameByEnum,
   cvRomuWorkoutTypeByInt,
@@ -6,6 +7,53 @@ import {
 } from "@/services/functions/convertValue"
 
 describe("services/functions/convertValue", () => {
+  describe("cvObjectToQueryParamString", () => {
+    test("obj is string", () => {
+      const result = cvObjectToQueryParamString({ key: "value" })
+      expect(result).toBe("key=value")
+    })
+
+    test("obj is number", () => {
+      const result = cvObjectToQueryParamString({ key: 1 })
+      expect(result).toBe("key=1")
+    })
+
+    test("obj is boolean", () => {
+      const result = cvObjectToQueryParamString({ key: true })
+      expect(result).toBe("key=1")
+    })
+
+    test("obj is string, number, boolean", () => {
+      const result = cvObjectToQueryParamString({
+        key1: "value",
+        key2: 1,
+        key3: true,
+      })
+      expect(result).toBe("key1=value&key2=1&key3=1")
+    })
+
+    test("obj is string, number, boolean, null", () => {
+      const result = cvObjectToQueryParamString({
+        key1: "value",
+        key2: 1,
+        key3: true,
+        key4: null,
+      })
+      expect(result).toBe("key1=value&key2=1&key3=1")
+    })
+
+    test("obj is string, number, boolean, null, undefined", () => {
+      const result = cvObjectToQueryParamString({
+        key1: "value",
+        key2: 1,
+        key3: true,
+        key4: null,
+        key5: undefined,
+      })
+      expect(result).toBe("key1=value&key2=1&key3=1")
+    })
+  })
+
   describe("cvRomuWorkoutPartByInt", () => {
     test("part is in RomuWorkoutPart", () => {
       const result = cvRomuWorkoutPartByInt(1)
