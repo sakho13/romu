@@ -80,8 +80,8 @@ export class WorkoutsService {
   ) {
     return await db.workout.create({
       data: {
-        name: workout.name,
-        memo: workout.memo,
+        name: workout.name.trim(),
+        memo: workout.memo.trim(),
         type: workout.type,
         part: workout.part,
         isDefault: false,
