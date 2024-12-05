@@ -263,20 +263,112 @@ paths:
         "401":
           $ref: "#/components/responses/RomuApiV1Error401Response"
 
-  /v1/training?day={day}:
-    get:
-      summary: トレーニング記録の取得
+    patch:
+      summary: ワークアウトの部分更新
       tags:
         - workout
         - development
       parameters:
-        - name: day
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workoutId:
+                  type: string
+                  nullable: false
+                name:
+                  type: string
+                  nullable: true
+                  example: "ベンチプレス（バーベル）"
+                  minLength: 1
+                  maxLength: 50
+                memo:
+                  type: string
+                  nullable: true
+                  example: ""
+                  minLength: 0
+                  maxLength: 1000
+                type:
+                  nullable: true
+                  $ref: "#/components/schemas/RomuWorkoutTypeEnum"
+                part:
+                  nullable: true
+                  $ref: "#/components/schemas/RomuWorkoutPartEnum"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  workoutId:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
+    delete:
+      summary: ワークアウトの削除
+      tags:
+        - workout
+        - development
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                workoutId:
+                  type: string
+                  nullable: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  workoutId:
+                    type: string
+                    description: 削除されたワークアウトのID
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
+  /v1/training?yyyymm={yyyymm}&width={width}:
+    get:
+      summary: トレーニング記録の取得
+      description: 指定月とその前後widthヶ月のデータを取得
+      tags:
+        - workout
+        - development
+      parameters:
+        - name: yyyymm
           in: path
           required: true
-          description: トレーニング日
           schema:
             type: string
-            example: "20241101"
+            example: "202411"
+        - name: width
+          in: path
+          required: true
+          description: 取得する月の幅
+          schema:
+            type: integer
+            example: 1
         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
