@@ -3,11 +3,10 @@ import { RomuApiError } from "@/services/classes/RomuApiError"
 import { RomuApiValidateService } from "@/services/RomuApiValidateService"
 import { UserService } from "@/services/UserService"
 import { prisma } from "@/utils/prisma"
-import { NextApiRequest } from "next"
 import { headers } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
   const api = new RomuApi("User-GET")
 
   const result = await api.execute(async () => {
@@ -29,7 +28,7 @@ export async function GET(req: NextApiRequest) {
   return NextResponse.json(result.data, { status: result.status })
 }
 
-export async function POST(req: NextApiRequest) {
+export async function POST(req: NextRequest) {
   const api = new RomuApi("User-POST")
 
   const result = await api.execute(async () => {
