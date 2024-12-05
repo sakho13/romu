@@ -1,7 +1,6 @@
 import { RomuApiError } from "@/services/classes/RomuApiError"
 import { RomuApiErrors } from "@/services/classes/RomuApiErrors"
 import { RomuApiValidateService } from "@/services/RomuApiValidateService"
-import { te } from "date-fns/locale"
 
 describe("services/RomuApiValidateService", () => {
   describe("checkMultipleErrors", () => {
@@ -68,6 +67,22 @@ describe("services/RomuApiValidateService", () => {
             errorCode: "InvalidInputRequiredParameter",
             column: "notKey",
             param: { column: "name" },
+          }).forRomuApiErrorsProp,
+        ),
+      )
+    })
+
+    test("空のオブジェクトの場合、エラーを返す", () => {
+      const obj = {}
+      const keys = [{ column: "key" }]
+      expect(
+        RomuApiValidateService.checkRequiredParameterInObject(obj, keys).error,
+      ).toEqual(
+        new RomuApiErrors(
+          new RomuApiError({
+            errorCode: "InvalidInputRequiredParameter",
+            column: "key",
+            param: { column: "key" },
           }).forRomuApiErrorsProp,
         ),
       )
@@ -202,6 +217,230 @@ describe("services/RomuApiValidateService", () => {
           param: { column: "column" },
         }),
       )
+    })
+  })
+
+  describe("ApiValidator", () => {
+    describe("validateWorkoutPostInput", () => {
+      test("正常なリクエストボディの場合、trueを返す", () => {
+        expect(
+          RomuApiValidateService.validateWorkoutPostInput({
+            name: "name",
+            memo: "memo",
+            type: 1,
+            part: 1,
+          }),
+        ).toBe(true)
+      })
+
+      test("空のボディの場合、必須項目エラー", () => {
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput({}),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputRequiredParameter",
+              column: "name",
+              param: { column: "ワークアウト名" },
+            }).forRomuApiErrorsProp,
+            new RomuApiError({
+              errorCode: "InvalidInputRequiredParameter",
+              column: "memo",
+              param: { column: "メモ" },
+            }).forRomuApiErrorsProp,
+            new RomuApiError({
+              errorCode: "InvalidInputRequiredParameter",
+              column: "type",
+              param: { column: "種目" },
+            }).forRomuApiErrorsProp,
+            new RomuApiError({
+              errorCode: "InvalidInputRequiredParameter",
+              column: "part",
+              param: { column: "部位" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("nameが文字列でない場合、エラーをスローする", () => {
+        const body = {
+          name: 1,
+          type: 1,
+          part: 1,
+          memo: "memo",
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputType",
+              column: "name",
+              param: { column: "ワークアウト名", type: "文字列" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("nameが空文字の場合、エラーをスローする", () => {
+        const body = {
+          name: "",
+          type: 1,
+          part: 1,
+          memo: "memo",
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputTrimMinLength",
+              column: "name",
+              param: { column: "ワークアウト名", minLength: "1" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("nameが50文字を超える場合、エラーをスローする", () => {
+        const body = {
+          name: "a".repeat(51),
+          type: 1,
+          part: 1,
+          memo: "memo",
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputTrimMaxLength",
+              column: "name",
+              param: { column: "ワークアウト名", maxLength: "50" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("memoが文字列でない場合、エラーをスローする", () => {
+        const body = {
+          name: "name",
+          type: 1,
+          part: 1,
+          memo: 1,
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputType",
+              column: "memo",
+              param: { column: "メモ", type: "文字列" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("memoが1000文字を超える場合、エラーをスローする", () => {
+        const body = {
+          name: "name",
+          type: 1,
+          part: 1,
+          memo: "a".repeat(1001),
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputTrimMaxLength",
+              column: "memo",
+              param: { column: "メモ", maxLength: "1000" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("typeが数値でない場合、エラーをスローする", () => {
+        const body = {
+          name: "name",
+          type: "type",
+          part: 1,
+          memo: "memo",
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputType",
+              column: "type",
+              param: { column: "種目", type: "数値" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("typeが区分値外の場合、エラーをスローする", () => {
+        const body = {
+          name: "name",
+          type: 100,
+          part: 1,
+          memo: "memo",
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputEnum",
+              column: "type",
+              param: { column: "種目" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("partが数値でない場合、エラーをスローする", () => {
+        const body = {
+          name: "name",
+          type: 1,
+          part: "part",
+          memo: "memo",
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputType",
+              column: "part",
+              param: { column: "部位", type: "数値" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("partが区分値外の場合、エラーをスローする", () => {
+        const body = {
+          name: "name",
+          type: 1,
+          part: 100,
+          memo: "memo",
+        }
+        expect(() =>
+          RomuApiValidateService.validateWorkoutPostInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputEnum",
+              column: "part",
+              param: { column: "部位" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
     })
   })
 })
