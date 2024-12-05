@@ -111,6 +111,29 @@ paths:
         "401":
           $ref: "#/components/responses/RomuApiV1Error401Response"
 
+    delete:
+      summary: ユーザの退会
+      tags:
+        - common
+        - development
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
   /v1/workouts:
     get:
       summary: ワークアウト一覧の取得
