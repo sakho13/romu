@@ -112,7 +112,7 @@ type RomuApiIO = {
 
     PATCH: {
       input: Partial<{
-        name: string | null
+        name: string
       }>
 
       out: {
