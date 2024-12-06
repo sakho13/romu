@@ -3,6 +3,7 @@
 import { useAuthStore } from "@/stores/useAuthStore"
 import { RomuHeader } from "@/components/organisms/RomuHeader"
 import { joinClassName } from "@/services/functions/joinClassName"
+import { RomuFeaturesCollapses } from "@/components/molecules/RomuFeaturesCollapses"
 
 export default function Home() {
   const { accessToken } = useAuthStore()
@@ -14,7 +15,7 @@ export default function Home() {
       <main>
         <div
           className={joinClassName(
-            "h-[300px] flex justify-center items-center",
+            "lg:h-[300px] h-[200px] flex justify-center items-center",
             "bg-base-100",
             "border-b",
           )}
@@ -26,40 +27,13 @@ export default function Home() {
 
         <section className='flex justify-center pt-4'>
           <div>
-            <h2>主な機能</h2>
-
-            <div>
-              <div
-                tabIndex={0}
-                className='collapse collapse-arrow border-base-300 bg-base-200 border'
-              >
-                <div className='collapse-title text-xl font-medium'>
-                  トレーニング記録
-                </div>
-                <div className='collapse-content'>
-                  <p>
-                    tabindex="0" attribute is necessary to make the div
-                    focusable
-                  </p>
-                </div>
-              </div>
-
-              <div
-                tabIndex={0}
-                className='collapse collapse-arrow border-base-300 bg-base-200 border'
-              >
-                <div className='collapse-title text-xl font-medium'>
-                  トレーニングメニュー
-                </div>
-                <div className='collapse-content'>
-                  <p>
-                    tabindex="0" attribute is necessary to make the div
-                    focusable
-                  </p>
-                </div>
-              </div>
+            <div className='my-4'>
+              <h2 className='w-fit mx-auto text-xl font-bold select-none'>
+                主な機能
+              </h2>
             </div>
-            {/*  */}
+
+            <RomuFeaturesCollapses />
           </div>
         </section>
       </main>
