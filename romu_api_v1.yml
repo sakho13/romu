@@ -39,6 +39,8 @@ paths:
                   name:
                     type: string
                     example: "RoMu"
+                    minLength: 1
+                    maxLength: 24
               examples:
                 Success:
                   value:
@@ -80,6 +82,8 @@ paths:
                   name:
                     type: string
                     example: "RoMu"
+                    minLength: 1
+                    maxLength: 24
         "400":
           $ref: "#/components/responses/RomuApiV1Error400Response"
         "401":
@@ -106,6 +110,7 @@ paths:
                     description: ユーザ名（全体に公開される）
                     nullable: true
                     minLength: 1
+                    maxLength: 24
         "400":
           $ref: "#/components/responses/RomuApiV1Error400Response"
         "401":
