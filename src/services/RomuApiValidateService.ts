@@ -135,6 +135,49 @@ export class RomuApiValidateService {
   }
 
   /**
+   * /api/v1/user PATCHリクエストのバリデーション
+   * @param body リクエストボディ
+   * @returns
+   */
+  public static validateUserPatchInput(
+    body: any,
+  ): body is ApiRequest<"User-PATCH"> {
+    if (Object.keys(body).length === 0)
+      throw new RomuApiError({ errorCode: "EmptyRequestBody", param: {} })
+
+    const error = RomuApiValidateService.checkMultipleErrors([
+      () => {
+        if ("name" in body) {
+          const name = body.name
+
+          if (typeof name !== "string")
+            throw new RomuApiError({
+              errorCode: "InvalidInputType",
+              column: "name",
+              param: { column: "ニックネーム", type: "文字列" },
+            })
+
+          if (!(String(name).trim().length >= 1))
+            throw new RomuApiError({
+              errorCode: "InvalidInputTrimMinLength",
+              column: "name",
+              param: { column: "ニックネーム", minLength: "1" },
+            })
+
+          if (!(String(name).trim().length <= 24))
+            throw new RomuApiError({
+              errorCode: "InvalidInputTrimMaxLength",
+              column: "name",
+              param: { column: "ニックネーム", maxLength: "24" },
+            })
+        }
+      },
+    ])
+    if (error) throw error
+    return true
+  }
+
+  /**
    * /api/v1/workout POSTリクエストのバリデーション
    * @param body リクエストボディ
    * @returns

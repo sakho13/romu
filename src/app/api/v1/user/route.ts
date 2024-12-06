@@ -60,30 +60,18 @@ export async function PATCH(req: NextRequest) {
       headers().get("authorization"),
     )
 
-    const editUserData: Partial<{
-      name: string
-    }> = {}
     const body = await req.json()
 
-    RomuApiValidateService.checkMultipleErrors([
-      () => {
-        if ("name" in body) {
-          const name = body.name
-          if (!(String(name).trim().length >= 1))
-            throw new RomuApiError({
-              errorCode: "InvalidInputTrimMinLength",
-              param: { column: "name", minLength: "1" },
-            })
-
-          editUserData.name = name
-        }
-      },
-    ])
+    if (!RomuApiValidateService.validateUserPatchInput(body))
+      throw new RomuApiError({
+        errorCode: "UnknownError",
+        param: {},
+      })
 
     const user = await UserService.updateUserByFirebaseUid(
       prisma,
       decoded.uid,
-      editUserData,
+      body,
     )
 
     return {
