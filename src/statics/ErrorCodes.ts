@@ -58,4 +58,8 @@ export const ErrorCodes = {
     status: 400,
     message: "値が不正です [column]の選択値に誤りがあります",
   },
+  EmptyRequestBody: {
+    status: 400,
+    message: "リクエストデータが空です",
+  },
 } as const
