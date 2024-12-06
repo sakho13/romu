@@ -1,7 +1,7 @@
 "use client"
 
-import { CenteringLayout } from "@/components/atoms/CenteringLayout"
 import { SignInForm } from "@/components/organisms/SignInForm"
+import { SingleColTemplate } from "@/components/templates/SingleColTemplate"
 import { useAuthStore } from "@/stores/useAuthStore"
 import { redirect } from "next/navigation"
 
@@ -11,10 +11,10 @@ export default function SignInPage() {
   if (accessToken) redirect("/romu")
 
   return (
-    <CenteringLayout id='sign-in-page'>
+    <SingleColTemplate id='sign-in-page'>
       <div className='my-16'>
         <SignInForm />
       </div>
-    </CenteringLayout>
+    </SingleColTemplate>
   )
 }
