@@ -221,6 +221,70 @@ describe("services/RomuApiValidateService", () => {
   })
 
   describe("ApiValidator", () => {
+    describe("validateUserPatchInput", () => {
+      test("正常なリクエストボディの場合、trueを返す", () => {
+        expect(
+          RomuApiValidateService.validateUserPatchInput({
+            name: "name",
+          }),
+        ).toBe(true)
+      })
+
+      test("空のボディの場合、空エラーをスローする", () => {
+        expect(() => RomuApiValidateService.validateUserPatchInput({})).toThrow(
+          new RomuApiError({
+            errorCode: "EmptyRequestBody",
+            param: {},
+          }),
+        )
+      })
+
+      test("nameが文字列でない場合、エラーをスローする", () => {
+        const body = { name: 1 }
+        expect(() =>
+          RomuApiValidateService.validateUserPatchInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputType",
+              column: "name",
+              param: { column: "ニックネーム", type: "文字列" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("nameが空文字の場合、エラーをスローする", () => {
+        const body = { name: "" }
+        expect(() =>
+          RomuApiValidateService.validateUserPatchInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputTrimMinLength",
+              column: "name",
+              param: { column: "ニックネーム", minLength: "1" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+
+      test("nameが24文字を超える場合、エラーをスローする", () => {
+        const body = { name: "a".repeat(25) }
+        expect(() =>
+          RomuApiValidateService.validateUserPatchInput(body),
+        ).toThrow(
+          new RomuApiErrors(
+            new RomuApiError({
+              errorCode: "InvalidInputTrimMaxLength",
+              column: "name",
+              param: { column: "ニックネーム", maxLength: "24" },
+            }).forRomuApiErrorsProp,
+          ),
+        )
+      })
+    })
+
     describe("validateWorkoutPostInput", () => {
       test("正常なリクエストボディの場合、trueを返す", () => {
         expect(
