@@ -6,6 +6,7 @@ import {
 } from "@/types/ApiTypes"
 import { verifyIdToken } from "@/utils/firebaseAdmin"
 import { RomuApiErrors } from "./RomuApiErrors"
+import { PrismaClientInitializationError } from "@prisma/client/runtime/library"
 
 export class RomuApi<P extends ApiResponseSelector> {
   private apiSelector: P
@@ -27,6 +28,19 @@ export class RomuApi<P extends ApiResponseSelector> {
         },
       }
     } catch (error) {
+      if (error instanceof PrismaClientInitializationError) {
+        const dbError = new RomuApiError(
+          { errorCode: "DbConnectionFailed", param: {} },
+          error,
+        )
+        return {
+          status: dbError.httpStatus,
+          data: {
+            success: false,
+            errors: dbError.toErrorUnits(),
+          },
+        }
+      }
       if (error instanceof RomuApiError) {
         return {
           status: error.httpStatus,
