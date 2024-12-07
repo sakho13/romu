@@ -10,7 +10,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrateDB:dev": "prisma migrate dev",
+    "start:prod": "npm run build && npm start",
+    "prisma:dev": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy",
+    "prisma:seed": "npx prisma db seed",
     "seed": "ts-node prisma/seed.ts",
     "generatePrisma": "prisma generate",
     "test": "jest"
