@@ -27,12 +27,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: package.json
+          node-version-file: ./romu_nextjs/package.json
           cache: "npm"
-          cache-dependency-path: "package-lock.json"
+          cache-dependency-path: "./romu_nextjs/package-lock.json"
 
       - name: Install dependencies
+        working-directory: romu_nextjs
         run: npm ci
 
       - name: Run tests
+        working-directory: romu_nextjs
         run: npm test --maxWorkers=100% --watchAll=false -- --coverage
