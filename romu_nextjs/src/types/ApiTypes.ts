@@ -31,7 +31,7 @@ export type RomuApiErrorUnit = {
 export type ErrorUnitGenerator<E extends ErrorCode> = {
   errorCode: E
   param: ErrorMessageParams<E>
-  column?: E extends `InvalidInput${infer _}` ? string : undefined
+  column?: E extends `InvalidInput${string}` ? string : undefined
 }
 
 export type ErrorMessageParams<E extends ErrorCode> = {
@@ -76,7 +76,7 @@ export type ApiRequest<selector extends ApiResponseSelector> =
       ? method extends RomuApiMethods<prefix>
         ? RomuApiIO[prefix][method] extends { input: infer input }
           ? input
-          : {}
+          : object
         : never
       : never
     : never
@@ -87,7 +87,7 @@ export type ApiResponse<selector extends ApiResponseSelector> =
       ? method extends RomuApiMethods<prefix>
         ? RomuApiIO[prefix][method] extends { out: infer out }
           ? out
-          : {}
+          : object
         : never
       : never
     : never
@@ -155,11 +155,15 @@ type RomuApiIO = {
 
   Trainings: {
     GET: {
-      out: {}
+      out: {
+        a: string
+      }
     }
 
     POST: {
-      out: {}
+      out: {
+        a: string
+      }
     }
   }
 }

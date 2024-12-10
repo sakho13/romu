@@ -29,16 +29,18 @@ export function SignInForm() {
         .then(async (userCredential) => {
           console.log("result", userCredential)
           const jwt = await userCredential?.user.getIdToken()
+          console.log("jwt", jwt)
           if (!jwt) {
-            router.replace(`${path}?m=GitHub認証に失敗しました`)
+            // router.replace(`${path}?m=GitHub認証に失敗しました`)
             return
           }
 
-          const resultApi = await ApiV1Service.postUser(jwt)
+          await ApiV1Service.postUser(jwt)
           router.replace(`/romu`)
         })
-        .catch((_error) => {
-          router.replace(`${path}?m=GitHub認証に失敗しました`)
+        .catch((err) => {
+          console.log("error", err)
+          // router.replace(`${path}?m=GitHub認証に失敗しました`)
         })
         .finally(() => doingAuth.stopLoading())
     }

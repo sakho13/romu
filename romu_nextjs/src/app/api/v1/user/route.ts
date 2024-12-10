@@ -3,7 +3,6 @@ import { RomuApiError } from "@/services/classes/RomuApiError"
 import { RomuApiValidateService } from "@/services/RomuApiValidateService"
 import { UserService } from "@/services/UserService"
 import { prisma } from "@/utils/prisma"
-import { headers } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -11,7 +10,7 @@ export async function GET(req: NextRequest) {
 
   const result = await api.execute(async () => {
     const decoded = await api.verifyAuthorizationHeader(
-      headers().get("authorization"),
+      req.headers.get("authorization"),
     )
 
     const user = await UserService.getUserByFirebaseUid(prisma, decoded.uid, {
@@ -33,7 +32,7 @@ export async function POST(req: NextRequest) {
 
   const result = await api.execute(async () => {
     const decoded = await api.verifyAuthorizationHeader(
-      headers().get("authorization"),
+      req.headers.get("authorization"),
     )
 
     const user = await UserService.getUserByFirebaseUid(prisma, decoded.uid, {
@@ -57,7 +56,7 @@ export async function PATCH(req: NextRequest) {
 
   const result = await api.execute(async () => {
     const decoded = await api.verifyAuthorizationHeader(
-      headers().get("authorization"),
+      req.headers.get("authorization"),
     )
 
     const body = await req.json()
