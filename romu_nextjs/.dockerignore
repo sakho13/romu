@@ -1,1 +1,7 @@
 node_modules
+RomuNextJsDockerfile
+.dockerignore
+npm-debug.log
+.git
+.next
+README.md

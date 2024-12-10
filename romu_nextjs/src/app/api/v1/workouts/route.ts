@@ -5,7 +5,6 @@ import {
 } from "@/services/functions/convertValue"
 import { WorkoutsService } from "@/services/WorkoutsService"
 import { prisma } from "@/utils/prisma"
-import { headers } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -13,7 +12,7 @@ export async function GET(req: NextRequest) {
 
   const result = await api.execute(async () => {
     const decoded = await api.verifyAuthorizationHeader(
-      headers().get("authorization"),
+      req.headers.get("authorization"),
     )
     const workouts = await WorkoutsService.getWorkouts(prisma, decoded.uid)
 

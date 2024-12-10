@@ -4,6 +4,7 @@ import { SignInForm } from "@/components/organisms/SignInForm"
 import { SingleColTemplate } from "@/components/templates/SingleColTemplate"
 import { useAuthStore } from "@/stores/useAuthStore"
 import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
 export default function SignInPage() {
   const { accessToken } = useAuthStore()
@@ -13,7 +14,9 @@ export default function SignInPage() {
   return (
     <SingleColTemplate id='sign-in-page'>
       <div className='my-16'>
-        <SignInForm />
+        <Suspense>
+          <SignInForm />
+        </Suspense>
       </div>
     </SingleColTemplate>
   )

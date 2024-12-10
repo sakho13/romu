@@ -3,7 +3,7 @@
 import { CenteringLayout } from "@/components/atoms/CenteringLayout"
 import { RomuPageTitle } from "@/components/atoms/RomuPageTitle"
 import { RomuWorkoutDetail } from "@/components/organisms/RomuWorkoutDetail"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 type Props = {
   params: Promise<{ workoutId: string }>
@@ -12,13 +12,13 @@ type Props = {
 export default function WorkoutsDetailPage({ params }: Props) {
   const [workoutId, setWorkoutId] = useState<string | null>(null)
 
-  const _onChangeWorkoutId = async () => {
+  const _onChangeWorkoutId = useCallback(async () => {
     setWorkoutId((await params).workoutId)
-  }
+  }, [params])
 
   useEffect(() => {
     _onChangeWorkoutId()
-  }, [params])
+  }, [_onChangeWorkoutId, params])
 
   return (
     <CenteringLayout>

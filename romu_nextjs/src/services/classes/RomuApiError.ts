@@ -18,7 +18,7 @@ export class RomuApiError<E extends ErrorCode>
 
   private err: Error | null = null
 
-  constructor(err: ErrorUnitGenerator<E>, catchError?: any) {
+  constructor(err: ErrorUnitGenerator<E>, catchError?: Error) {
     const msg = Object.keys(err.param).reduce((p, paramKey) => {
       return p.replaceAll(
         `[${paramKey}]`,

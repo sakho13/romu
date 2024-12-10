@@ -38,7 +38,7 @@ export class RomuApiValidateService {
               errorCode: "UnknownError",
               param: {},
             },
-            error,
+            error instanceof Error ? error : undefined,
           )
           errors.pushError(err.forRomuApiErrorsProp)
         }
@@ -49,9 +49,9 @@ export class RomuApiValidateService {
   }
 
   public static checkRequiredParameterInObject<K extends string>(
-    x: any,
+    x: unknown,
     keys: { column: K; name?: string }[],
-  ): RomuApiValidateReturn<{ [key in K]: any }> {
+  ): RomuApiValidateReturn<{ [key in K]: unknown }> {
     const error = this.checkMultipleErrors(
       keys.map((key) => () => {
         this.requiredParameter(x, key.column, key.name)
@@ -63,7 +63,7 @@ export class RomuApiValidateService {
           error,
         }
       : {
-          data: x,
+          data: x as { [key in K]: unknown },
           error: null,
         }
   }
@@ -76,11 +76,15 @@ export class RomuApiValidateService {
    * @returns
    */
   public static requiredParameter<K extends string>(
-    x: any,
+    x: unknown,
     key: K,
     columnName?: string,
-  ): x is { [key in K]: any } {
-    if (!(key in x) || typeof x !== "object" || x === null)
+  ): x is { [key in K]: unknown } {
+    if (
+      !(typeof x === "object" && x && key in x) ||
+      typeof x !== "object" ||
+      x === null
+    )
       throw new RomuApiError({
         errorCode: "InvalidInputRequiredParameter",
         column: key,
@@ -90,7 +94,7 @@ export class RomuApiValidateService {
   }
 
   public static isStringMoreThan<K extends string>(
-    x: any,
+    x: unknown,
     minLength: number,
     key: K,
     columnName?: string,
@@ -105,7 +109,7 @@ export class RomuApiValidateService {
   }
 
   public static isStringLessThan<K extends string>(
-    x: any,
+    x: unknown,
     maxLength: number,
     key: K,
     columnName?: string,
@@ -119,17 +123,27 @@ export class RomuApiValidateService {
     return true
   }
 
-  public static isIncludedInEnum<K extends string, E extends any>(
-    x: any,
+  public static isIncludedInEnum<K extends string, E>(
+    x: unknown,
     enumArray: E[],
     key: K,
     columnName?: string,
   ): x is E {
-    if (!enumArray.includes(x))
+    if (!enumArray.includes(x as unknown as E))
       throw new RomuApiError({
         errorCode: "InvalidInputEnum",
         column: key,
         param: { column: columnName ?? key },
+      })
+    return true
+  }
+
+  public static isObject(x: unknown): x is Record<string, unknown> {
+    if (typeof x !== "object" || x === null)
+      throw new RomuApiError({
+        errorCode: "InvalidInputType",
+        column: "object",
+        param: { column: "オブジェクト", type: "オブジェクト" },
       })
     return true
   }
@@ -140,8 +154,10 @@ export class RomuApiValidateService {
    * @returns
    */
   public static validateUserPatchInput(
-    body: any,
+    body: unknown,
   ): body is ApiRequest<"User-PATCH"> {
+    if (!this.isObject(body)) return false
+
     if (Object.keys(body).length === 0)
       throw new RomuApiError({ errorCode: "EmptyRequestBody", param: {} })
 
@@ -183,7 +199,7 @@ export class RomuApiValidateService {
    * @returns
    */
   public static validateWorkoutPostInput(
-    body: any,
+    body: unknown,
   ): body is ApiRequest<"Workout-POST"> {
     const { data, error: requiredError } =
       RomuApiValidateService.checkRequiredParameterInObject(body, [
@@ -214,7 +230,7 @@ export class RomuApiValidateService {
       )
     if (!error.isEmpty) throw error
 
-    if (data.name.trim().length < 1)
+    if (String(data.name).trim().length < 1)
       error.pushError(
         new RomuApiError({
           errorCode: "InvalidInputTrimMinLength",
@@ -222,7 +238,7 @@ export class RomuApiValidateService {
           param: { column: "ワークアウト名", minLength: "1" },
         }),
       )
-    if (data.name.trim().length > 50)
+    if (String(data.name).trim().length > 50)
       error.pushError(
         new RomuApiError({
           errorCode: "InvalidInputTrimMaxLength",
@@ -231,7 +247,7 @@ export class RomuApiValidateService {
         }),
       )
 
-    if (data.memo.trim().length > 1000)
+    if (String(data.memo).trim().length > 1000)
       error.pushError(
         new RomuApiError({
           errorCode: "InvalidInputTrimMaxLength",
@@ -239,7 +255,11 @@ export class RomuApiValidateService {
           param: { column: "メモ", maxLength: "1000" },
         }),
       )
-    if (!objectKeysNumber(RomuWorkoutType).includes(data.type))
+    if (
+      !objectKeysNumber(RomuWorkoutType).includes(
+        data.type as keyof typeof RomuWorkoutType,
+      )
+    )
       error.pushError(
         new RomuApiError({
           errorCode: "InvalidInputEnum",
@@ -247,7 +267,11 @@ export class RomuApiValidateService {
           param: { column: "種目" },
         }),
       )
-    if (!objectKeysNumber(RomuWorkoutPart).includes(data.part))
+    if (
+      !objectKeysNumber(RomuWorkoutPart).includes(
+        data.part as keyof typeof RomuWorkoutPart,
+      )
+    )
       error.pushError(
         new RomuApiError({
           errorCode: "InvalidInputEnum",

@@ -64,7 +64,7 @@ export class RomuApi<P extends ApiResponseSelector> {
             errorCode: "UnknownError",
             param: {},
           },
-          error,
+          error instanceof Error ? error : undefined,
         )
         return {
           status: 400,
@@ -95,7 +95,10 @@ export class RomuApi<P extends ApiResponseSelector> {
     try {
       return await this.verifyFirebaseIdToken(accessToken)
     } catch (error) {
-      throw new RomuApiError({ errorCode: "AuthFailed", param: {} }, error)
+      throw new RomuApiError(
+        { errorCode: "AuthFailed", param: {} },
+        error instanceof Error ? error : undefined,
+      )
     }
   }
 

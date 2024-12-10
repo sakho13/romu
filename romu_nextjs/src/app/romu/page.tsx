@@ -1,40 +1,46 @@
 "use client"
 
-import { CenteringLayout } from "@/components/atoms/CenteringLayout"
 import { RomuCalender } from "@/components/organisms/RomuCalender"
+import { SplittedColTemplate } from "@/components/templates/SplittedColTemplate"
 import { ApiV1Service } from "@/services/ApiService"
 import { useCalender } from "@/services/hooks/useCalender"
-import { useDate } from "@/services/hooks/useDate"
-import { useEffect } from "react"
+import { useAuthStore } from "@/stores/useAuthStore"
 
 export default function RomuTopPage() {
   const calenderState = useCalender()
+  const { accessToken } = useAuthStore()
 
   return (
-    <CenteringLayout>
-      <div className=''>
-        <h1>今日は{useRomuTopPage().today}です</h1>
+    <SplittedColTemplate
+      id='romu-top-calender-log'
+      childrenLeft={
+        <div>
+          <h1>今日は{useRomuTopPage().today}です</h1>
 
-        <RomuCalender calenderState={calenderState} />
-      </div>
+          <RomuCalender calenderState={calenderState} />
+        </div>
+      }
+      childrenRight={
+        <div>
+          <p>ここにトレーニング記録を表示</p>
 
-      <div>
-        <p>ここにトレーニング記録を表示</p>
-
-        <button onClick={() => ApiV1Service.getUser("aaaa")}>koko</button>
-      </div>
-    </CenteringLayout>
+          <button onClick={() => ApiV1Service.getUser(accessToken ?? "")}>
+            koko
+          </button>
+        </div>
+      }
+    />
   )
 }
 
 const useRomuTopPage = () => {
-  const { date, formatDate, initDate } = useDate()
+  // const { formatDate, initDate } = useDate()
 
-  useEffect(() => {
-    initDate()
-  }, [])
+  // useEffect(() => {
+  //   initDate()
+  // }, [initDate])
 
   return {
-    today: formatDate("/"),
+    today: "",
   }
 }

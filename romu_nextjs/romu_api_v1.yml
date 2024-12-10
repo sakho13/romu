@@ -376,6 +376,85 @@ paths:
         "401":
           $ref: "#/components/responses/RomuApiV1Error401Response"
 
+  /v1/training:
+    post:
+      summary: トレーニング記録の新規作成
+      tags:
+        - workout
+        - development
+      parameters:
+        - $ref: "#/components/parameters/AuthorizationHeader"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trainedAt:
+                  type: string
+                  nullable: false
+                  example: "20241101"
+                  pattern: "^[0-9]{4}[0-9]{2}$"
+                menu:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      workoutId:
+                        type: string
+                        nullable: false
+                      set:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            weight:
+                              type: number
+                              description: 重量
+                              example: 90
+                            rep:
+                              type: integer
+                              description: 回数
+                              example: 10
+                            time:
+                              type: string
+                              nullable: true
+                              description: 時間 hhmmss
+                              example: "003000"
+                            distance:
+                              type: number
+                              nullable: true
+                              description: 距離 / km
+                              example: 1000
+                      trainingMemo:
+                        type: string
+                        description: メモ
+                        example: "90kg達成"
+                        minLength: 0
+                        maxLength: 1000
+                memo:
+                  type: string
+                  nullable: false
+                  example: ""
+                  minLength: 0
+                  maxLength: 1000
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trainingId:
+                    type: string
+                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+        "400":
+          $ref: "#/components/responses/RomuApiV1Error400Response"
+        "401":
+          $ref: "#/components/responses/RomuApiV1Error401Response"
+
   /v1/training?yyyymm={yyyymm}&width={width}:
     get:
       summary: トレーニング記録の取得
@@ -390,6 +469,7 @@ paths:
           schema:
             type: string
             example: "202411"
+            pattern: "^[0-9]{4}[0-9]{2}$"
         - name: width
           in: path
           required: true
@@ -412,6 +492,7 @@ paths:
                   trainedAt:
                     type: string
                     example: "20241101"
+                    pattern: "^[0-9]{4}[0-9]{2}$"
                   menu:
                     type: array
                     items:

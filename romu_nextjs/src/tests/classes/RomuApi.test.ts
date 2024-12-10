@@ -1,13 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RomuApi } from "@/services/classes/RomuApi"
 import { RomuApiError } from "@/services/classes/RomuApiError"
 import { RomuApiErrors } from "@/services/classes/RomuApiErrors"
-import * as admin from "firebase-admin"
 
 describe("services/classes/RomuApi", () => {
-  beforeAll(() => {
-    ;(admin.initializeApp as any) = jest.fn()
-  })
-
   describe("execute", () => {
     test("成功する", async () => {
       const mainLogic = jest.fn()

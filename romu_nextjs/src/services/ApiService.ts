@@ -45,7 +45,10 @@ async function requestApiV1<S extends ApiResponseSelector>(
   const path = ApiPath[selector]
   const body = method === "GET" ? undefined : JSON.stringify(input)
   const requestPath =
-    method === "GET" ? path + `?${cvObjectToQueryParamString(input)}` : path
+    method === "GET"
+      ? path +
+        `?${cvObjectToQueryParamString(input as Record<string, unknown>)}`
+      : path
 
   const result = await fetch(requestPath, {
     method,
