@@ -11,25 +11,21 @@ export default function RomuTopPage() {
   const { accessToken } = useAuthStore()
 
   return (
-    <SplittedColTemplate
-      id='romu-top-calender-log'
-      childrenLeft={
-        <div>
-          <h1>今日は{useRomuTopPage().today}です</h1>
+    <SplittedColTemplate id='romu-top-calender-log'>
+      <div>
+        <h1>今日は{useRomuTopPage().today}です</h1>
 
-          <RomuCalender calenderState={calenderState} />
-        </div>
-      }
-      childrenRight={
-        <div>
-          <p>ここにトレーニング記録を表示</p>
+        <RomuCalender calenderState={calenderState} />
+      </div>
 
-          <button onClick={() => ApiV1Service.getUser(accessToken ?? "")}>
-            koko
-          </button>
-        </div>
-      }
-    />
+      <div>
+        <p>ここにトレーニング記録を表示</p>
+
+        <button onClick={() => ApiV1Service.getUser(accessToken ?? "")}>
+          koko
+        </button>
+      </div>
+    </SplittedColTemplate>
   )
 }
 

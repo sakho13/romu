@@ -4,15 +4,13 @@ import { CenteringLayout } from "../atoms/CenteringLayout"
 type Props = {
   id?: string
   className?: string
-  childrenLeft: React.ReactNode
-  childrenRight: React.ReactNode
+  children: [React.ReactNode, React.ReactNode]
 }
 
 export function SplittedColTemplate({
   id,
   className,
-  childrenLeft,
-  childrenRight,
+  children: [childrenLeft, childrenRight],
 }: Props) {
   return (
     <CenteringLayout id={id} className={joinClassName(className ?? "")}>
