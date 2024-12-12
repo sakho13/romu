@@ -17,26 +17,25 @@ export function RomuWorkoutList() {
   const [workouts, setWorkouts] = useState<RomuWorkout[]>([])
   const loading = useLoading(false)
 
-  const _fetchWorkouts = async () => {
-    if (loading.loading) return
-    loading.startLoading()
-
-    if (!accessToken) {
-      loading.stopLoading()
-      return
-    }
-
-    try {
-      const result = await ApiV1Service.getWorkouts(accessToken)
-      if (result.success) setWorkouts(result.data.workouts)
-    } catch (error) {
-    } finally {
-      loading.stopLoading()
-    }
-  }
-
   useEffect(() => {
+    const _fetchWorkouts = async () => {
+      if (loading.loading) return
+      loading.startLoading()
+
+      if (!accessToken) {
+        loading.stopLoading()
+        return
+      }
+
+      try {
+        const result = await ApiV1Service.getWorkouts(accessToken)
+        if (result.success) setWorkouts(result.data.workouts)
+      } finally {
+        loading.stopLoading()
+      }
+    }
     _fetchWorkouts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -88,7 +87,7 @@ export function RomuWorkoutList() {
       >
         <svg
           viewBox='0 0 20 20'
-          enable-background='new 0 0 20 20'
+          enableBackground='new 0 0 20 20'
           className='w-6 h-6 inline-block'
         >
           <path

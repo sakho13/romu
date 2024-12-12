@@ -1,18 +1,18 @@
 import type { Metadata } from "next"
-import localFont from "next/font/local"
 import { AuthProvider } from "@/components/organisms/AuthProvider"
 import "./globals.css"
+import { StrictMode } from "react"
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-})
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-})
+// const geistSans = localFont({
+//   src: "./fonts/GeistVF.woff",
+//   variable: "--font-geist-sans",
+//   weight: "100 900",
+// })
+// const geistMono = localFont({
+//   src: "./fonts/GeistMonoVF.woff",
+//   variable: "--font-geist-mono",
+//   weight: "100 900",
+// })
 
 export const metadata: Metadata = {
   title: "RoMu",
@@ -25,11 +25,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='ja' data-theme='bumblebee'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <AuthProvider>{children}</AuthProvider>
+    <html lang='ja' data-theme='bumblebee' suppressHydrationWarning={true}>
+      <body>
+        <StrictMode>
+          <AuthProvider>{children}</AuthProvider>
+        </StrictMode>
       </body>
     </html>
   )

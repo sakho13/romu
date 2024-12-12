@@ -9,24 +9,22 @@ type Props = {
 }
 
 export function AuthProvider({ children }: Props) {
-  const { accessToken, setAccessToken } = useAuthStore()
+  const { setAccessToken } = useAuthStore()
 
   useEffect(() => {
     setAccessToken(null)
 
-    firebaseClient.auth.onIdTokenChanged(async (user) => {
-      console.log("onIdTokenChanged", user)
+    const idTokenSubscriber = firebaseClient.auth.onIdTokenChanged(
+      async (user) => {
+        console.log("onIdTokenChanged", user)
 
-      if (user) setAccessToken(await user.getIdToken())
-      else setAccessToken(undefined)
-    })
+        if (user) setAccessToken(await user.getIdToken())
+        else setAccessToken(null)
+      },
+    )
 
-    if (!accessToken) setAccessToken(undefined)
-
-    // firebaseClient.auth.onAuthStateChanged(async (user) => {
-    //   console.log("onAuthStateChanged", user)
-    // })
-  }, [])
+    return () => idTokenSubscriber()
+  }, [setAccessToken])
 
   return children
 }

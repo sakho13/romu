@@ -4,9 +4,12 @@ import { useAuthStore } from "@/stores/useAuthStore"
 import { RomuHeader } from "@/components/organisms/RomuHeader"
 import { joinClassName } from "@/services/functions/joinClassName"
 import { RomuFeaturesCollapses } from "@/components/molecules/RomuFeaturesCollapses"
+import { redirect } from "next/navigation"
 
 export default function Home() {
   const { accessToken } = useAuthStore()
+
+  if (accessToken) redirect("/romu")
 
   return (
     <div className=''>

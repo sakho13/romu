@@ -1,8 +1,6 @@
 import { ApiV1Service } from "@/services/ApiService"
-import { useLoading } from "@/services/hooks/useLoading"
 import { useAuthStore } from "@/stores/useAuthStore"
 import { RomuWorkout } from "@/types/WorkoutType"
-import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { LoadingIcon } from "../atoms/LoadingIcon"
 import Link from "next/link"
@@ -13,41 +11,23 @@ type Props = {
 
 export function RomuWorkoutDetail({ workoutId }: Props) {
   const { accessToken } = useAuthStore()
-  const loading = useLoading(false)
-
-  const router = useRouter()
 
   const [isEditable, setIsEditable] = useState(false)
   const [workout, setWorkout] = useState<RomuWorkout | null>(null)
 
-  const _fetchWorkout = async (workoutId: string) => {
-    if (loading.loading) return
-    loading.startLoading()
-
-    if (!accessToken) {
-      loading.stopLoading()
-      return
-    }
-
-    try {
+  useEffect(() => {
+    const _fetchWorkout = async (workoutId: string) => {
+      if (!accessToken) return
       const result = await ApiV1Service.getWorkout(accessToken, workoutId)
       if (result.success) {
         setWorkout(result.data.workout)
         setIsEditable(result.data.editable)
       }
-    } catch (error) {
-    } finally {
-      loading.stopLoading()
     }
-  }
-
-  const _editWorkout = async () => {}
-
-  useEffect(() => {
     _fetchWorkout(workoutId)
-  }, [workoutId])
+  }, [workoutId, accessToken])
 
-  if (loading.loading) return <LoadingIcon />
+  if (!workout) return <LoadingIcon />
 
   if (!workout)
     return (

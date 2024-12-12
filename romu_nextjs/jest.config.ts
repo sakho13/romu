@@ -7,7 +7,7 @@ import type { Config } from "jest"
 import nextJest from "next/jest.js"
 
 const createJestConfig = nextJest({
-  dir: "./"
+  dir: "./",
 })
 
 const config: Config = {
@@ -16,8 +16,8 @@ const config: Config = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
-    "@/(.*)$": "<rootDir>/src/$1"
-  }
+    "@/(.*)$": "<rootDir>/src/$1",
+  },
 }
 
 export default createJestConfig(config)

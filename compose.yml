@@ -1,13 +1,14 @@
-version: "3.8"
-
 services:
   romu_nextjs:
     hostname: romu_nextjs
     build:
       context: romu_nextjs
       dockerfile: RomuNextJsDockerfile
+    networks:
+      - app_network
     environment:
       DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME}
+      WATCHPACK_POLLING: true
       NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
       NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
       NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
@@ -19,9 +20,19 @@ services:
       NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID}
     ports:
       - "3000:3000"
+      - "5555:5555"
     volumes:
       - ./romu_nextjs:/romu_nextjs
-    command: sh -c "npm run prisma:deploy && npm run prisma:seed && npm run dev"
+    command: sh -c "npm run prisma:deploy && npm run prisma:seed && tail -f /dev/null"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 2048M
+        reservations:
+          cpus: "0.2"
+          memory: 256M
     depends_on:
       db:
         condition: service_started
@@ -29,6 +40,8 @@ services:
   db:
     image: postgres:17
     hostname: db
+    networks:
+      - app_network
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -37,6 +50,18 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.2"
+          memory: 256M
 
 volumes:
   db_data:
+
+networks:
+  app_network:
+    driver: bridge

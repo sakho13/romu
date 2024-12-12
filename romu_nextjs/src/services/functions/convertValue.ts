@@ -5,7 +5,9 @@ import {
   RomuWorkoutTypeEnum,
 } from "@/types/WorkoutType"
 
-export function cvObjectToQueryParamString(obj: Record<string, any>): string {
+export function cvObjectToQueryParamString(
+  obj: Record<string, unknown>,
+): string {
   return Object.keys(obj)
     .map((key) => {
       if (typeof obj[key] === "string") return `${key}=${obj[key]}`
