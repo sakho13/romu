@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='ja' data-theme='bumblebee'>
+    <html lang='ja' data-theme='bumblebee' suppressHydrationWarning={true}>
       <body>
         <StrictMode>
           <AuthProvider>{children}</AuthProvider>
