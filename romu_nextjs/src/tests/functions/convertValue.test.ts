@@ -19,8 +19,11 @@ describe("services/functions/convertValue", () => {
     })
 
     test("obj is boolean", () => {
-      const result = cvObjectToQueryParamString({ key: true })
-      expect(result).toBe("key=1")
+      const result1 = cvObjectToQueryParamString({ key: true })
+      expect(result1).toBe("key=1")
+
+      const result2 = cvObjectToQueryParamString({ key: false })
+      expect(result2).toBe("key=0")
     })
 
     test("obj is string, number, boolean", () => {
