@@ -11,12 +11,11 @@
     "start": "next start",
     "lint": "next lint",
     "start:prod": "npm run build && npm run prisma:generate && npm run prisma:deploy && npm run prisma:seed && npm start",
-    "prisma:generate": "npx prisma generate",
+    "prisma:generate": "prisma generate",
     "prisma:dev": "npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
     "prisma:seed": "npx prisma db seed",
     "seed": "ts-node prisma/seed.ts",
-    "generatePrisma": "prisma generate",
     "test": "jest"
   },
   "prisma": {
