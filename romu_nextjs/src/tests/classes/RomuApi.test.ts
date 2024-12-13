@@ -255,11 +255,9 @@ describe("services/classes/RomuApi", () => {
           role: 1,
           updatedAt: new Date(),
         })
-      expect(await api.verifyAuthorizationHeader(token)).toStrictEqual({
-        uid: "romu123",
-        email: "email",
-        name: "name",
-      })
+      await expect(api.verifyAuthorizationHeader(token)).rejects.toThrow(
+        new RomuApiError({ errorCode: "AuthFailed", param: {} }),
+      )
     })
   })
 
