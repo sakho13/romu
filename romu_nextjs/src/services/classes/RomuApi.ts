@@ -94,11 +94,11 @@ export class RomuApi<P extends ApiResponseSelector> {
     const adminVerifyToken = process.env.ADMIN_VERIFY_TOKEN
     if (adminVerifyToken) {
       const maybeAdminToken = authorization.startsWith(
-        `RomuAdminBearer ${adminVerifyToken}`,
+        `RomuAdminBearer ${adminVerifyToken} `,
       )
       if (maybeAdminToken) {
         const id = authorization.replace(
-          `RomuAdminBearer ${adminVerifyToken}`,
+          `RomuAdminBearer ${adminVerifyToken} `,
           "",
         )
         const adminUser = await UserService.getUserByFirebaseUidAdminRole(
