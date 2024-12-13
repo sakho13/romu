@@ -151,10 +151,16 @@ describe("services/classes/RomuApi", () => {
   describe("verifyAuthorizationHeader", () => {
     test("成功する", async () => {
       const api = new RomuApi("User-GET") as any
-      api.verifyFirebaseIdToken = jest.fn().mockResolvedValue("decoded")
+      api.verifyFirebaseIdToken = jest
+        .fn()
+        .mockResolvedValue({ uid: "decoded", email: "email", name: "name" })
       const token = "Bearer token"
       const result = await api.verifyAuthorizationHeader(token)
-      expect(result).toEqual("decoded")
+      expect(result).toStrictEqual({
+        uid: "decoded",
+        email: "email",
+        name: "name",
+      })
     })
 
     test("デコードが失敗する", async () => {
