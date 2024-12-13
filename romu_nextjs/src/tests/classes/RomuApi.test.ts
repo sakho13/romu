@@ -2,6 +2,7 @@
 import { RomuApi } from "@/services/classes/RomuApi"
 import { RomuApiError } from "@/services/classes/RomuApiError"
 import { RomuApiErrors } from "@/services/classes/RomuApiErrors"
+import { UserService } from "@/services/UserService"
 
 describe("services/classes/RomuApi", () => {
   describe("execute", () => {
@@ -204,6 +205,61 @@ describe("services/classes/RomuApi", () => {
       await expect(api.verifyAuthorizationHeader(token)).rejects.toThrow(
         new RomuApiError({ errorCode: "AuthFailed", param: {} }),
       )
+    })
+  })
+
+  describe("verifyAuthorizationHeader 管理者ケース", () => {
+    test("tokenの形式「RomuAdminBearer romu123 userid_romu123」管理者ユーザが存在する", async () => {
+      const api = new RomuApi("User-GET") as any
+      const token = "RomuAdminBearer romu123 userid_romu123"
+      jest
+        .spyOn(UserService, "getUserByFirebaseUidAdminRole")
+        .mockResolvedValueOnce({
+          id: "userid_romu123",
+          firebaseUid: "romu123",
+          email: "email",
+          name: "name",
+          createdAt: new Date(),
+          role: 1,
+          updatedAt: new Date(),
+        })
+      expect(await api.verifyAuthorizationHeader(token)).toStrictEqual({
+        uid: "romu123",
+        email: "email",
+        name: "name",
+      })
+    })
+
+    test("tokenの形式「RomuAdminBearer romu123 userid_romu123」管理者ユーザが存在しない", async () => {
+      const api = new RomuApi("User-GET") as any
+      const token = "RomuAdminBearer romu123 userid_romu123"
+      jest
+        .spyOn(UserService, "getUserByFirebaseUidAdminRole")
+        .mockResolvedValueOnce(null)
+      await expect(api.verifyAuthorizationHeader(token)).rejects.toThrow(
+        new RomuApiError({ errorCode: "AuthFailed", param: {} }),
+      )
+    })
+
+    test("tokenの形式「RomuAdminBearer romu1234 userid_romu123」管理者ユーザが存在するがトークンが違う", async () => {
+      const api = new RomuApi("User-GET") as any
+      const token = "RomuAdminBearer romu1234 userid_romu123"
+      jest
+        .spyOn(UserService, "getUserByFirebaseUidAdminRole")
+        .mockResolvedValueOnce({
+          id: "userid_romu123",
+          firebaseUid: "romu123",
+          email: "email",
+          name: "name",
+          createdAt: new Date(),
+          role: 1,
+          updatedAt: new Date(),
+        })
+      expect(await api.verifyAuthorizationHeader(token)).toStrictEqual({
+        uid: "romu123",
+        email: "email",
+        name: "name",
+      })
     })
   })
 
