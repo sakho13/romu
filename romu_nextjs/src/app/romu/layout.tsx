@@ -2,6 +2,7 @@
 
 import { CenteringLayout } from "@/components/atoms/CenteringLayout"
 import { LoadingIcon } from "@/components/atoms/LoadingIcon"
+import { RomuBreadcrumbs } from "@/components/organisms/RomuBreadcrumbs"
 import { RomuHeader } from "@/components/organisms/RomuHeader"
 import { useAuthStore } from "@/stores/useAuthStore"
 
@@ -14,6 +15,10 @@ export default function RomuRootLayout({ children }: Props) {
   return (
     <>
       <RomuHeader type={"signed-in"} />
+
+      <div className='w-full px-16'>
+        <RomuBreadcrumbs />
+      </div>
 
       {accessToken ? (
         children
