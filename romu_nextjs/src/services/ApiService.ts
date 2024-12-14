@@ -57,6 +57,5 @@ async function requestApiV1<S extends ApiResponseSelector>(
     },
     body,
   })
-  console.log("result", result)
   return (await result.json()) as RomuApiResponse<S>["data"]
 }

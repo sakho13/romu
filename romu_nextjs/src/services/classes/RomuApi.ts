@@ -7,6 +7,14 @@ import {
 import { verifyIdToken } from "@/utils/firebaseAdmin"
 import { RomuApiErrors } from "./RomuApiErrors"
 import { PrismaClientInitializationError } from "@prisma/client/runtime/library"
+import { UserService } from "../UserService"
+import { prisma } from "@/utils/prisma"
+
+interface AuthorizationHeaderDecoded {
+  uid: string
+  email: string
+  name: string
+}
 
 export class RomuApi<P extends ApiResponseSelector> {
   private apiSelector: P
@@ -79,12 +87,34 @@ export class RomuApi<P extends ApiResponseSelector> {
 
   public async verifyAuthorizationHeader(
     authorization: string | null | undefined,
-  ) {
-    if (
-      !authorization ||
-      typeof authorization !== "string" ||
-      !authorization.startsWith("Bearer ")
-    )
+  ): Promise<AuthorizationHeaderDecoded> {
+    if (!authorization || typeof authorization !== "string")
+      throw new RomuApiError({ errorCode: "AuthFailed", param: {} })
+
+    const adminVerifyToken = process.env.ADMIN_VERIFY_TOKEN
+    if (adminVerifyToken) {
+      const maybeAdminToken = authorization.startsWith(
+        `RomuAdminBearer ${adminVerifyToken} `,
+      )
+      if (maybeAdminToken) {
+        const id = authorization.replace(
+          `RomuAdminBearer ${adminVerifyToken} `,
+          "",
+        )
+        const adminUser = await UserService.getUserByFirebaseUidAdminRole(
+          prisma,
+          id,
+        )
+        if (adminUser)
+          return {
+            uid: adminUser.firebaseUid,
+            email: adminUser.email ?? "",
+            name: adminUser.name ?? "",
+          }
+      }
+    }
+
+    if (!authorization.startsWith("Bearer "))
       throw new RomuApiError({ errorCode: "AuthFailed", param: {} })
 
     const accessToken = authorization.split(" ")[1]
@@ -93,7 +123,12 @@ export class RomuApi<P extends ApiResponseSelector> {
       throw new RomuApiError({ errorCode: "AuthFailed", param: {} })
 
     try {
-      return await this.verifyFirebaseIdToken(accessToken)
+      const decoded = await this.verifyFirebaseIdToken(accessToken)
+      return {
+        uid: decoded.uid,
+        email: decoded.email ?? "",
+        name: decoded.name ?? "",
+      }
     } catch (error) {
       throw new RomuApiError(
         { errorCode: "AuthFailed", param: {} },

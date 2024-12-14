@@ -51,4 +51,16 @@ export class UserService {
       where: { firebaseUid },
     })
   }
+
+  public static async getUserByFirebaseUidAdminRole(
+    db: PrismaClient,
+    firebaseUid: string,
+  ) {
+    return await db.user.findUnique({
+      where: {
+        firebaseUid,
+        role: 1,
+      },
+    })
+  }
 }
