@@ -67,8 +67,12 @@ export function RomuNewWorkoutForm() {
   }
 
   return (
-    <form id='new-workout-form' className='min-w-[300px]' action={_postWorkout}>
-      <label className='form-control w-full max-w-xs'>
+    <form
+      id='new-workout-form'
+      className='lg:w-[300px] lg:m-0 w-full mx-8'
+      action={_postWorkout}
+    >
+      <label className='form-control w-full'>
         <div className='label'>
           <span className='label-text'>
             Workout Name<span className='font-thin'> *</span>
@@ -76,7 +80,7 @@ export function RomuNewWorkoutForm() {
         </div>
         <input
           type='text'
-          className='input input-bordered w-full max-w-xs'
+          className='input input-bordered w-full'
           value={newWorkout.name}
           onChange={(e) =>
             setNewWorkout({ ...newWorkout, name: e.target.value })
@@ -87,7 +91,7 @@ export function RomuNewWorkoutForm() {
         />
       </label>
 
-      <label className='form-control w-full max-w-xs'>
+      <label className='form-control w-full'>
         <div className='label'>
           <span className='label-text'>
             Part<span className='font-thin'> *</span>
@@ -112,7 +116,7 @@ export function RomuNewWorkoutForm() {
         </select>
       </label>
 
-      <label className='form-control w-full max-w-xs'>
+      <label className='form-control w-full'>
         <div className='label'>
           <span className='label-text'>
             Type<span className='font-thin'> *</span>
