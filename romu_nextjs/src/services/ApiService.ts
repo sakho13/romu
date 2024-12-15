@@ -34,6 +34,13 @@ export class ApiV1Service {
   public static async getWorkout(accessToken: string, workoutId: string) {
     return await requestApiV1("Workout-GET", { workoutId }, accessToken)
   }
+
+  public static async postWorkout(
+    accessToken: string,
+    workout: ApiRequest<"Workout-POST">,
+  ) {
+    return await requestApiV1("Workout-POST", workout, accessToken)
+  }
 }
 
 async function requestApiV1<S extends ApiResponseSelector>(
