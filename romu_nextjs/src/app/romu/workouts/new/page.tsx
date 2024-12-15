@@ -1,13 +1,11 @@
 "use client"
-import { CenteringLayout } from "@/components/atoms/CenteringLayout"
-import { RomuPageTitle } from "@/components/atoms/RomuPageTitle"
+import { RomuNewWorkoutForm } from "@/components/organisms/RomuNewWorkoutForm"
+import { SingleColTemplate } from "@/components/templates/SingleColTemplate"
 
 export default function NewWorkoutPage() {
   return (
-    <CenteringLayout>
-      <div>
-        <RomuPageTitle title='カスタムワークアウトを作成' />
-      </div>
-    </CenteringLayout>
+    <SingleColTemplate>
+      <RomuNewWorkoutForm />
+    </SingleColTemplate>
   )
 }
