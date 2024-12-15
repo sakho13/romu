@@ -22,11 +22,18 @@ export function RomuBreadcrumbs() {
     if (pathname === "/romu") {
       setBreadcrumbs([romuCurrent("Home", "home")])
     }
-    if (pathname === "/romu/workouts") {
-      setBreadcrumbs([
-        romuLink("Home", "/romu", "home"),
-        romuCurrent("Workouts", "workouts"),
-      ])
+    if (pathname.startsWith("/romu/workouts")) {
+      if (pathname === "/romu/workouts") {
+        setBreadcrumbs([
+          romuLink("Home", "/romu", "home"),
+          romuCurrent("Workouts", "workouts"),
+        ])
+      } else {
+        setBreadcrumbs([
+          romuLink("Home", "/romu", "home"),
+          romuLink("Workouts", "/workouts", "workouts"),
+        ])
+      }
     }
     if (pathname === "/romu/profile") {
       setBreadcrumbs([
