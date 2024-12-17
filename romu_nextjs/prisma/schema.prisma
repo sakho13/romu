@@ -27,7 +27,9 @@ model User {
   // Optional for WebAuthn support
   // Authenticator Authenticator[]
   role        Int    @default(0) // 0: 一般ユーザ、1: 管理者
+  status      Int    @default(0)
 
+  deletedAt DateTime? 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 

@@ -63,4 +63,17 @@ export class UserService {
       },
     })
   }
+
+  public static async updateUserStatusAndDeleteAtByFirebaseUid(
+    db: PrismaClient,
+    firebaseUid: string,
+  ) {
+    return await db.user.update({
+      where: { firebaseUid },
+      data: {
+        status: 9,
+        deletedAt: new Date(),
+      },
+    })
+  }
 }
