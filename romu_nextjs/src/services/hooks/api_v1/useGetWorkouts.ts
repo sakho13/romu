@@ -1,5 +1,5 @@
+import { apiV1Fetcher } from "@/services/functions/apiV1Fetcher"
 import { useAuthStore } from "@/stores/useAuthStore"
-import { RomuApiResponse } from "@/types/ApiTypes"
 import useSWR from "swr"
 
 export function useGetWorkouts() {
@@ -8,7 +8,7 @@ export function useGetWorkouts() {
   const { data, error, isLoading } = useSWR(
     ["/api/v1/workouts", accessToken],
     async ([url, accessToken]) =>
-      apiV1Fetcher(url, {
+      apiV1Fetcher("Workouts-GET", url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -16,13 +16,8 @@ export function useGetWorkouts() {
   )
 
   return {
-    getWorkoutsData: data,
-    getWorkoutsError: error,
-    getWorkoutsLoading: isLoading,
+    dataGetWorkouts: data,
+    errorGetWorkouts: error,
+    isLoadingGetWorkouts: isLoading,
   }
 }
-
-const apiV1Fetcher = (...args: Parameters<typeof fetch>) =>
-  fetch(...args).then((res) => res.json()) as Promise<
-    RomuApiResponse<"Workouts-GET">["data"]
-  >

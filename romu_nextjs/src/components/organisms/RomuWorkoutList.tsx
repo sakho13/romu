@@ -9,15 +9,15 @@ import { joinClassName } from "@/services/functions/joinClassName"
 import { useGetWorkouts } from "@/services/hooks/api_v1/useGetWorkouts"
 
 export function RomuWorkoutList() {
-  const { getWorkoutsData, getWorkoutsLoading } = useGetWorkouts()
+  const { dataGetWorkouts, isLoadingGetWorkouts } = useGetWorkouts()
 
   return (
     <div id='romu-workout-list'>
       <div id='workout-search my-4'></div>
 
-      {getWorkoutsLoading ? (
+      {isLoadingGetWorkouts ? (
         <LoadingIcon />
-      ) : getWorkoutsData && getWorkoutsData.success ? (
+      ) : dataGetWorkouts && dataGetWorkouts.success ? (
         <table id='workout-list' className='table lg:w-[600px]'>
           <thead className='select-none'>
             <tr>
@@ -29,7 +29,7 @@ export function RomuWorkoutList() {
           </thead>
 
           <tbody>
-            {getWorkoutsData.data.workouts.map((workout) => (
+            {dataGetWorkouts.data.workouts.map((workout) => (
               <tr key={workout.id}>
                 <th title={workout.memo}>{workout.name}</th>
                 <th>{cvRomuWorkoutTypeNameByEnum(workout.type)}</th>
