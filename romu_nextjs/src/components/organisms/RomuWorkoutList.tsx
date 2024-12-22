@@ -1,50 +1,23 @@
 "use client"
-import { ApiV1Service } from "@/services/ApiService"
 import {
   cvRomuWorkoutPartNameByEnum,
   cvRomuWorkoutTypeNameByEnum,
 } from "@/services/functions/convertValue"
-import { useLoading } from "@/services/hooks/useLoading"
-import { useAuthStore } from "@/stores/useAuthStore"
-import { RomuWorkout } from "@/types/WorkoutType"
-import { useEffect, useState } from "react"
 import { LoadingIcon } from "../atoms/LoadingIcon"
 import Link from "next/link"
 import { joinClassName } from "@/services/functions/joinClassName"
+import { useGetWorkouts } from "@/services/hooks/api_v1/useGetWorkouts"
 
 export function RomuWorkoutList() {
-  const { accessToken } = useAuthStore()
-  const [workouts, setWorkouts] = useState<RomuWorkout[]>([])
-  const loading = useLoading(false)
-
-  useEffect(() => {
-    const _fetchWorkouts = async () => {
-      if (loading.loading) return
-      loading.startLoading()
-
-      if (!accessToken) {
-        loading.stopLoading()
-        return
-      }
-
-      try {
-        const result = await ApiV1Service.getWorkouts(accessToken)
-        if (result.success) setWorkouts(result.data.workouts)
-      } finally {
-        loading.stopLoading()
-      }
-    }
-    _fetchWorkouts()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const { getWorkoutsData, getWorkoutsLoading } = useGetWorkouts()
 
   return (
     <div id='romu-workout-list'>
       <div id='workout-search my-4'></div>
 
-      {loading.loading ? (
+      {getWorkoutsLoading ? (
         <LoadingIcon />
-      ) : (
+      ) : getWorkoutsData && getWorkoutsData.success ? (
         <table id='workout-list' className='table lg:w-[600px]'>
           <thead className='select-none'>
             <tr>
@@ -56,7 +29,7 @@ export function RomuWorkoutList() {
           </thead>
 
           <tbody>
-            {workouts.map((workout) => (
+            {getWorkoutsData.data.workouts.map((workout) => (
               <tr key={workout.id}>
                 <th title={workout.memo}>{workout.name}</th>
                 <th>{cvRomuWorkoutTypeNameByEnum(workout.type)}</th>
@@ -72,6 +45,8 @@ export function RomuWorkoutList() {
             ))}
           </tbody>
         </table>
+      ) : (
+        <p>ワークアウトが設定されていません</p>
       )}
 
       <Link
