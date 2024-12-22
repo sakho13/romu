@@ -43,7 +43,7 @@
 `compose.yml`にてアプリ、DB を定義している。
 
 ```sh
-#  コンテナ起動
+# コンテナ起動
 docker compose up -d
 
 # アプリコンテナへ
@@ -52,3 +52,26 @@ docker exec -it (コンテナ名 or コンテナID) bash
 # Next.jsアプリ起動
 npm run dev
 ```
+
+### VSCode デバッグモード
+
+`Next.js v14.2.15`では、`Docker`内のサーバーとローカル環境の`VSCode Debugger`の接続ができない。
+ため、下記のコマンドを実行して`node_modules`内のコードを書き換える必要がある。
+これは、`Next.js v14.3.x`にて修正される予定である。
+
+```sh
+sed -Ei '/NODE_OPTIONS.*nodeDebugType.*/s//NODE_OPTIONS = `${NODE_OPTIONS} --${nodeDebugType}=0.0.0.0:9230`;/' node_modules/next/dist/cli/next-dev.js
+```
+
+#### デバッガの起動方法(サーバーサイド)
+
+下記のコマンドで、`Next.js`サーバーを起動する。
+
+```sh
+# デバッグポートを付与して起動
+npm run debug
+```
+
+`VSCode`のデバッグにて`Next.js: debug server-side`を選択して、`Next.js`と接続する。
+
+この状態で、ブレークポイントやウォッチを設定し、API を実行するとデバッグできるようになる。
