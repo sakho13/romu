@@ -3,12 +3,11 @@ services:
     hostname: romu_nextjs
     build:
       context: romu_nextjs
-      dockerfile: RomuNextJsDockerfile
+      dockerfile: RomuNextJsDockerfile_development
     networks:
       - app_network
     environment:
       DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@db:5432/${DATABASE_NAME}
-      WATCHPACK_POLLING: true
       NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
       NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}
       NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${NEXT_PUBLIC_FIREBASE_PROJECT_ID}
@@ -22,15 +21,15 @@ services:
     ports:
       - "3000:3000"
       - "5555:5555"
+      - "9229:9229"
+      - "9230:9230"
     volumes:
       - ./romu_nextjs:/romu_nextjs
-    command: sh -c "npm run prisma:deploy && npm run prisma:seed && tail -f /dev/null"
-    restart: always
     deploy:
       resources:
         limits:
           cpus: "4"
-          memory: 2048M
+          memory: 2.5G
         reservations:
           cpus: "0.2"
           memory: 256M

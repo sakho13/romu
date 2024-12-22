@@ -4,15 +4,13 @@ import { ApiV1Service } from "@/services/ApiService"
 import { useLoading } from "@/services/hooks/useLoading"
 import { firebaseClient } from "@/utils/firebaseClient"
 import { signInWithPopup, GithubAuthProvider } from "firebase/auth"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 type Provider = "github" | "google" | "spotify"
 
 export function SignInForm() {
   const searchParam = useSearchParams()
   const message = searchParam.get("m")
-
-  const path = usePathname()
 
   const router = useRouter()
 
