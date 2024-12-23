@@ -116,24 +116,25 @@ paths:
         "401":
           $ref: "#/components/responses/RomuApiV1Error401Response"
 
-    delete:
+  /v1/quit:
+    post:
       summary: ユーザの退会
+      description: 退会処理を行い、ユーザ情報を無効化します
       tags:
         - common
-        - development
       parameters:
         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
-          description: Success
+          description: 退会処理が完了しました
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
+                  quit_at:
+                    pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$"
+                    example: "2024-11-01 00:00:00"
         "400":
           $ref: "#/components/responses/RomuApiV1Error400Response"
         "401":
