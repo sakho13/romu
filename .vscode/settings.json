@@ -37,6 +37,8 @@
     "cpus",
     "datasource",
     "nextjs",
-    "romu"
+    "romu",
+    "shadcn",
+    "WATCHPACK"
   ]
 }

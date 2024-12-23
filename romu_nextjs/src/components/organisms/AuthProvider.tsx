@@ -16,8 +16,6 @@ export function AuthProvider({ children }: Props) {
 
     const idTokenSubscriber = firebaseClient.auth.onIdTokenChanged(
       async (user) => {
-        console.log("onIdTokenChanged", user)
-
         if (user) setAccessToken(await user.getIdToken())
         else setAccessToken(null)
       },
