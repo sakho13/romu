@@ -396,7 +396,7 @@ paths:
                   type: string
                   nullable: false
                   example: "20241101"
-                  pattern: "^[0-9]{4}[0-9]{2}$"
+                  pattern: "^[0-9]{4}[0-9]{2}[0-9]{2}$"
                 menu:
                   type: array
                   items:
@@ -456,7 +456,7 @@ paths:
         "401":
           $ref: "#/components/responses/RomuApiV1Error401Response"
 
-  /v1/training?yyyymm={yyyymm}&width={width}:
+  /v1/trainings?yyyymm={yyyymm}&width={width}:
     get:
       summary: トレーニング記録の取得
       description: 指定月とその前後widthヶ月のデータを取得
@@ -474,10 +474,12 @@ paths:
         - name: width
           in: path
           required: true
-          description: 取得する月の幅
+          description: 取得する月の前後幅
           schema:
             type: integer
             example: 1
+            minimum: 0
+            maximum: 9
         - $ref: "#/components/parameters/AuthorizationHeader"
       responses:
         "200":
@@ -487,82 +489,84 @@ paths:
               schema:
                 type: object
                 properties:
-                  trainingId:
-                    type: string
-                    example: "OC4gK6P11123NasALqSshfkiopoPz3"
-                  trainedAt:
-                    type: string
-                    example: "20241101"
-                    pattern: "^[0-9]{4}[0-9]{2}$"
-                  menu:
+                  yyyymm:
                     type: array
+                    minItems: 0
                     items:
                       type: object
                       properties:
-                        workoutId:
+                        trainingId:
                           type: string
-                          example: "benchPress"
-                        workoutName:
+                        trainedAt:
                           type: string
-                          example: "ベンチプレス"
-                        type:
-                          $ref: "#/components/schemas/RomuWorkoutTypeEnum"
-                        part:
-                          $ref: "#/components/schemas/RomuWorkoutPartEnum"
+                          example: "20241101"
+                          pattern: "^[0-9]{4}[0-9]{2}[0-9]{2}$"
                         trainingMemo:
                           type: string
-                          description: メモ
-                        set:
+                          minLength: 0
+                          maxLength: 1000
+                        menu:
                           type: array
+                          minItems: 1
                           items:
                             type: object
                             properties:
-                              weight:
-                                type: number
-                                description: 重量
-                                example: 90
-                              rep:
-                                type: integer
-                                description: 回数
-                                example: 10
-                              time:
+                              workoutId:
                                 type: string
-                                nullable: true
-                                description: 時間 hhmmss
-                                example: "003000"
-                              distance:
-                                type: number
-                                nullable: true
-                                description: 距離 / km
-                                example: 1000
+                              workoutName:
+                                type: string
+                              type:
+                                $ref: "#/components/schemas/RomuWorkoutTypeEnum"
+                              part:
+                                $ref: "#/components/schemas/RomuWorkoutPartEnum"
+                              workoutMemo:
+                                type: string
+                                minLength: 0
+                                maxLength: 1000
+                              set:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    weight:
+                                      type: number
+                                    rep:
+                                      type: integer
+                                    time:
+                                      type: string
+                                    distance:
+                                      type: number
               examples:
-                Success:
+                "Success width=1":
                   value:
-                    trainingId: "OC4gK6P11123NasALqSshfkiopoPz3"
-                    trainedAt: "20241101"
-                    menu:
-                      - workoutId: "benchPress"
-                        workoutName: "ベンチプレス"
-                        type: 1
-                        part: 1
+                    "202410": []
+                    "202411":
+                      - trainingId: "OC4gK6P11123NasALqSshfkiopoPz3"
+                        trainedAt: "20241101"
                         trainingMemo: "90kg達成"
-                        set:
-                          - weight: 90
-                            rep: 1
-                          - weight: 70
-                            rep: 9
-                          - weight: 70
-                            rep: 8
-                      - workoutId: "wfnauihAsdj"
-                        workoutName: "トレッドミル"
-                        type: 9
-                        part: 0
-                        trainingMemo: ""
-                        set:
-                          - time: null
-                            distance: 1.5
-                          - time: "001500"
-                            distance: null
+                        menu:
+                          - workoutId: "OC4gK6P11123NasALqSshfkiopoPz3"
+                            workoutName: "ベンチプレス（バーベル）"
+                            type: 1
+                            part: 1
+                            workoutMemo: "回数重視"
+                            set:
+                              - weight: 90
+                                rep: 1
+                                time: null
+                                distance: null
+                              - weight: 70
+                                rep: 10
+                                time: null
+                                distance: null
+                              - weight: 70
+                                rep: 8
+                                time: null
+                                distance: null
+                    "202412": []
+                "Empty width=0":
+                  value:
+                    "202411": []
         "400":
           $ref: "#/components/responses/RomuApiV1Error400Response"
         "401":
