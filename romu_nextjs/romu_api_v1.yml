@@ -457,6 +457,10 @@ paths:
             schema:
               type: object
               properties:
+                trainingId:
+                  type: string
+                  nullable: true
+                  description: "既にトレーニングが存在する場合trainingIdは必須"
                 trainedAt:
                   type: string
                   nullable: false
@@ -493,13 +497,13 @@ paths:
                               nullable: true
                               description: 距離 / km
                               example: 1000
-                      trainingMemo:
+                      workoutMemo:
                         type: string
                         description: メモ
                         example: "90kg達成"
                         minLength: 0
                         maxLength: 1000
-                memo:
+                trainingMemo:
                   type: string
                   nullable: false
                   example: ""
