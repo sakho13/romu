@@ -16,6 +16,7 @@
     "prisma:dev": "npx prisma migrate dev",
     "prisma:deploy": "npx prisma migrate deploy",
     "prisma:seed": "npx prisma db seed",
+    "prisma:init": "npm run prisma:generate && npm run prisma:deploy && npm run prisma:seed",
     "prisma:studio": "npx prisma studio",
     "test": "jest"
   },
