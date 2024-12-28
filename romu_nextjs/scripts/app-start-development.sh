@@ -1,8 +1,6 @@
 #!/bin/bash
 
-npm run prisma:deploy
-
-npm run prisma:seed
+npm run prisma:init
 
 # Next.js デバッグポートバグ対応
 # https://zenn.dev/miroscular/articles/3d2ac64cb878b8
