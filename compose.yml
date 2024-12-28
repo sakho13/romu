@@ -25,7 +25,7 @@ services:
       - "9230:9230"
     volumes:
       - ./romu_nextjs:/romu_nextjs
-      - node-modules:/romu_nextjs/node_modules
+      - node_modules:/romu_nextjs/node_modules
     deploy:
       resources:
         limits:
@@ -63,7 +63,7 @@ services:
 volumes:
   db_data:
     driver: local
-  node-modules:
+  node_modules:
     driver: local
 
 networks:
