@@ -1,20 +1,20 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-romu_nextjs/node_modules
+**/node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
 
 # testing
-romu_nextjs/coverage
+coverage
 
 # next.js
-romu_nextjs/.next/
-romu_nextjs/out/
+**/.next
+**/out
 
 # production
-romu_nextjs/build
+**/build
 
 # misc
 .DS_Store
