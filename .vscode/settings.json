@@ -40,7 +40,9 @@
     "autoincrement",
     "cpus",
     "datasource",
+    "dpage",
     "nextjs",
+    "pgadmin",
     "romu",
     "shadcn",
     "WATCHPACK"
