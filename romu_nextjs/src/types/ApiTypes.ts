@@ -56,6 +56,8 @@ export const ApiPath: {
 
   "Trainings-GET": "/api/v1/trainings",
   "Trainings-POST": "/api/v1/trainings",
+
+  "Quit-POST": "/api/v1/quit",
 }
 
 type RomuApiPrefix = keyof RomuApiIO
@@ -163,6 +165,14 @@ type RomuApiIO = {
     POST: {
       out: {
         a: string
+      }
+    }
+  }
+
+  Quit: {
+    POST: {
+      out: {
+        quit_at: string
       }
     }
   }
