@@ -2,15 +2,12 @@
 
 import { RomuCalender } from "@/components/organisms/RomuCalender"
 import { SplittedColTemplate } from "@/components/templates/SplittedColTemplate"
-import { ApiV1Service } from "@/services/ApiService"
 import { DateService } from "@/services/DateService"
 import { useCalender } from "@/services/hooks/useCalender"
-import { useAuthStore } from "@/stores/useAuthStore"
 
 export default function RomuTopPage() {
   const { selectedDate, onSelectDate, currentMonth, onChangeMonth } =
-    useCalender()
-  const { accessToken } = useAuthStore()
+    useRomuTopPage()
 
   return (
     <SplittedColTemplate id='romu-top-calender-log'>
@@ -27,23 +24,19 @@ export default function RomuTopPage() {
         <p>ここにトレーニング記録を表示</p>
 
         <p>{DateService.convertDateToFormattedJP(selectedDate)}</p>
-
-        <button onClick={() => ApiV1Service.getUser(accessToken ?? "")}>
-          koko
-        </button>
       </div>
     </SplittedColTemplate>
   )
 }
 
 const useRomuTopPage = () => {
-  // const { formatDate, initDate } = useDate()
-
-  // useEffect(() => {
-  //   initDate()
-  // }, [initDate])
+  const { selectedDate, onSelectDate, currentMonth, onChangeMonth } =
+    useCalender()
 
   return {
-    today: "",
+    selectedDate,
+    onSelectDate,
+    currentMonth,
+    onChangeMonth,
   }
 }
