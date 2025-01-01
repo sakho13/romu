@@ -40,15 +40,51 @@
 
 ### Docker
 
-`compose.yml`にてアプリ、DB を定義している。
+`compose.yml`にてDBを定義している。
 
 ```sh
-#  コンテナ起動
+# コンテナ起動
 docker compose up -d
+```
 
-# アプリコンテナへ
-docker exec -it (コンテナ名 or コンテナID) bash
+### Next.js プロジェクトを起動
 
+DBコンテナの起動が完了したら、DBの初期化を実行する
+
+```sh
+# DB初期化コマンド(Prisma)
+npm run prisma:init
+```
+
+Next.jsアプリを起動する。
+
+```sh
 # Next.jsアプリ起動
 npm run dev
 ```
+
+<!-- ### VSCode デバッグモード
+
+`Next.js v14.2.15`では、`Docker`内のサーバーとローカル環境の`VSCode Debugger`の接続ができない。
+ため、下記のコマンドを実行して`node_modules`内のコードを書き換える必要がある。
+これは、`Next.js v14.3.x`にて修正される予定である。
+
+```sh
+sed -Ei '/NODE_OPTIONS.*nodeDebugType.*/s//NODE_OPTIONS = `${NODE_OPTIONS} --${nodeDebugType}=0.0.0.0:9230`;/' node_modules/next/dist/cli/next-dev.js
+``` -->
+
+#### デバッガの起動方法(サーバーサイド)
+
+VSCodeのサイドバー「デバッグ」にて`Next.js: debug server-side`を実行する。
+
+該当コードにブレークポイント等を設定して、Postman等でリクエストする。
+
+#### デバッガの起動方法(クライアントサイド)
+
+下記コマンドで、Next.jsアプリを起動した状態で、VSCodeのサイドバー「デバッグ」にて`Next.js: debug client-side`を実行する。
+
+```sh
+npm run dev
+```
+
+Chromeが起動するため、フロントコードにブレークポイント等を設定して画面を操作する。

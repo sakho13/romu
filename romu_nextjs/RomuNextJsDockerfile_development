@@ -1,0 +1,26 @@
+FROM node:20.11.0-slim as deps
+
+WORKDIR /romu_nextjs
+
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm install
+
+
+FROM node:20.11.0 as executor
+
+ENV env=DEVELOPMENT
+ENV WATCHPACK_POLLING=true
+
+WORKDIR /romu_nextjs
+
+ENV PATH /romu_nextjs/node_modules/.bin:$PATH
+
+COPY . .
+COPY --from=deps /romu_nextjs/node_modules ./node_modules
+
+COPY ./scripts/app-start-development.sh ./scripts/app-start-development.sh
+RUN chmod +x ./scripts/app-start-development.sh
+
+CMD [ "./scripts/app-start-development.sh" ]

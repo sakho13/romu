@@ -1,6 +1,10 @@
 {
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.addMissingImports": "explicit"
+  },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
@@ -36,7 +40,11 @@
     "autoincrement",
     "cpus",
     "datasource",
+    "dpage",
     "nextjs",
-    "romu"
+    "pgadmin",
+    "romu",
+    "shadcn",
+    "WATCHPACK"
   ]
 }
