@@ -18,8 +18,7 @@ export const verifyIdToken = async (token: string) => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(token)
     return decodedToken
-  } catch (error) {
-    console.log("トークン検証エラー:", error)
+  } catch {
     throw new Error("Unauthorized")
   }
 }

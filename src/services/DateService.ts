@@ -9,6 +9,15 @@ import {
 } from "date-fns"
 
 export class DateService {
+  /**
+   * 日付をフォーマットして返す
+   * @param date
+   * @returns yyyy年MM月dd日
+   */
+  public static convertDateToFormattedJP(date: Date) {
+    return format(date, "yyyy年MM月dd日")
+  }
+
   public static dateToYYYYMMDD(date: Date): YYYYMMDD {
     return {
       year: date.getFullYear(),

@@ -1,47 +1,17 @@
-import { YYYYMM, YYYYMMDD } from "@/types/DateTimeType"
 import { useState } from "react"
-import { DateService } from "../DateService"
-
-// type StoredDays = {
-//   [key: string]: number[][]
-// }
 
 export function useCalender(initDate: Date = new Date()) {
-  const [mainMonth, setMainMonth] = useState<YYYYMM>(
-    DateService.dateToYYYYMMDD(initDate),
-  )
-  const [selectedDate] = useState<YYYYMMDD>(
-    DateService.dateToYYYYMMDD(initDate),
-  )
-  // const [weeks, setWeeks] = useState<number[][]>([])
+  const [selectedDate, setSelectedDate] = useState<Date>(initDate)
+  const [currentMonth, setCurrentMonth] = useState<Date>(initDate)
 
-  function prevMonth() {
-    setMainMonth(DateService.shiftMonth(mainMonth, -1))
+  function onChangeMonth(date: Date) {
+    setCurrentMonth(date)
   }
-
-  function nextMonth() {
-    setMainMonth(DateService.shiftMonth(mainMonth, +1))
-  }
-
-  // function initCalender(mainMonth: YYYYMM) {
-  //   // 前後の月分も生成する
-  //   // 月を移動してした場合、追加分を生成する
-  //   const mainMonthDays = DateService.generateMonthDays(mainMonth)
-  // }
-
-  /**
-   * 1月分の日付を生成する
-   */
-  // function _generateDays(yyyymm: YYYYMM) {
-  //   return DateService.generateMonthDays(yyyymm)
-  // }
 
   return {
-    currentMonth: mainMonth,
+    currentMonth,
+    onChangeMonth,
     selectedDate,
-    calenderActions: {
-      prevMonth,
-      nextMonth,
-    },
+    onSelectDate: setSelectedDate,
   }
 }
