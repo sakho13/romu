@@ -33,9 +33,6 @@ export class RomuApiError<E extends ErrorCode>
     if (err.column) this.column = err.column
 
     if (catchError) this.err = catchError
-
-    if (this.errorCode === "UnknownError")
-      console.log("!!UnknownError >", this.err)
   }
 
   public toErrorUnits() {
