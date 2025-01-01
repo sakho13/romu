@@ -1,3 +1,15 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "prettier"]
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
+  "rules": {
+    "no-unused-vars": "off"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    // ↓ フロントライブラリ shadcn/ui に型定義に不十分があるため除外する
+    "src/components/ui",
+    "src/hooks",
+    "src/lib"
+  ]
 }
