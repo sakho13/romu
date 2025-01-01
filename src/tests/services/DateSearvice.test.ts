@@ -1,6 +1,20 @@
 import { DateService } from "@/services/DateService"
 
 describe("services/DateService", () => {
+  describe("convertDateToFormattedJP", () => {
+    test("Date型の日付を日本語フォーマットに変換する", () => {
+      expect(DateService.convertDateToFormattedJP(new Date(2022, 1, 1))).toBe(
+        "2022年02月01日",
+      )
+      expect(DateService.convertDateToFormattedJP(new Date(2022, 1, 28))).toBe(
+        "2022年02月28日",
+      )
+      expect(DateService.convertDateToFormattedJP(new Date(2022, 0, 1))).toBe(
+        "2022年01月01日",
+      )
+    })
+  })
+
   describe("dateToYYYYMMDD", () => {
     test("Date型の日付をYYYYMMDD型に変換する", () => {
       expect(DateService.dateToYYYYMMDD(new Date(2022, 1, 1))).toEqual({
