@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import { AuthProvider } from "@/components/organisms/AuthProvider"
-import "./globals.css"
 import { StrictMode } from "react"
+import { Toaster } from "@/components/ui/toaster"
+import "./globals.css"
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -29,6 +30,8 @@ export default function RootLayout({
       <body>
         <StrictMode>
           <AuthProvider>{children}</AuthProvider>
+
+          <Toaster />
         </StrictMode>
       </body>
     </html>
