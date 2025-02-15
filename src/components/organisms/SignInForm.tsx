@@ -17,8 +17,6 @@ export function SignInForm() {
   const doingAuth = useLoading()
 
   const signInWithOAuth = async (provider: Provider) => {
-    console.log("signInWithOAuth", provider, firebaseClient.auth)
-
     if (doingAuth.loading) return
 
     if (provider === "github") {
@@ -27,7 +25,6 @@ export function SignInForm() {
         .then(async (userCredential) => {
           console.log("result", userCredential)
           const jwt = await userCredential?.user.getIdToken()
-          console.log("jwt", jwt)
           if (!jwt) {
             // router.replace(`${path}?m=GitHub認証に失敗しました`)
             return
