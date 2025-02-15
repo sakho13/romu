@@ -29,12 +29,9 @@
 
 - `main` ... リリース中
 - `develop` ... 開発中ブランチ (派生元:`main`, マージ先:`main`)
-- `release` ... 次回リリースブランチ (派生元:`develop`, マージ先:`main` or `develop`)
-- `feature-xxx` ... 新機能開発ブランチ (派生元:`develop`, マージ先:`develop`)
-- `fix-xxx` ... バグ修正ブランチ (派生元:`main`, マージ先:`main`or `develop`)
-  - 初回リリースまでは`fix-xxx` → `main`
-  - 以降は、緊急修正を行う場合にのみ`fix-xxx` → `main`
-  - それ以外の場合は`fix-xxx` → `develop`
+- `feature/xxx` ... 新機能開発ブランチ (派生元:`develop`, マージ先:`develop`)
+- `fix/xxx` ... バグ修正ブランチ (派生元:`develop`, マージ先:`develop`)
+- `refactor/xxx` ... リファクタリング集中修正ブランチ (派生元:`develop`, マージ先:`develop`)
 
 ## 起動方法
 
